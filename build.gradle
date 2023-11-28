@@ -1,0 +1,51 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '2.7.17'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+}
+
+group = 'hello'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '11'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.3.1'
+	implementation 'org.springframework.boot:spring-boot-devtools'
+	implementation 'org.modelmapper:modelmapper:3.2.0' // 도메인 ↔ DTO 변환 라이브러리
+    
+	// 이메일 인증
+	implementation 'javax.mail:javax.mail-api:1.6.2' // class file for javax.mail.internet.MimeMessage not found
+	implementation 'com.sun.mail:javax.mail:1.6.2' // 구현체
+	implementation 'org.springframework.boot:spring-boot-starter-mail:3.1.5'
+	//Redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	testImplementation 'org.projectlombok:lombok:1.18.28'
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	runtimeOnly 'com.h2database:h2'
+
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:2.3.1'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
