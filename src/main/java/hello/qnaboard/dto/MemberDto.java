@@ -9,19 +9,21 @@ import lombok.Setter;
 import org.modelmapper.ModelMapper;
 
 import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
  * 회원 DTO
+ * (레디스에 세션 데이터 용으로 저장하기 위해 implements Serializable)
  */
 @Getter @Setter
-public class MemberDto {
+public class MemberDto implements Serializable {
 
     @NotBlank(message = "닉네임은 필수입니다.")
     @Size(max = 15, message = "닉네임은 최대 15자까지 가능합니다.")
     private String name; // 닉네임
 
-    @EmailDomain // @Email만으로 빈 문자열, 이메일 도메인 형식까지 검증하지 못하므로 도입
+    @EmailDomain
     @Email(message = "이메일 형식을 올바르게 입력해주세요.")
     private String email; // 이메일
 

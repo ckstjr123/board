@@ -55,17 +55,14 @@
                th:text="${err}">전체 오류 메시지</p>
         </div>
         <div>
-            <label for="loginId">이메일</label>
-            <input type="text" id="loginId" th:field="*{loginId}" class="form-control"
-                   th:errorclass="field-error">
-            <div class="field-error" th:errors="*{loginId}"/>
+            <label for="email">이메일</label>
+            <input type="text" id="email" th:field="*{email}" class="form-control">
+<!--            <div th:errors="*{email}"/>-->
         </div>
         <div>
             <label for="password" class="mt-4">비밀번호</label>
-            <input type="password" id="password" th:field="*{password}"
-                   class="form-control"
-                   th:errorclass="field-error">
-            <div class="field-error" th:errors="*{password}"/>
+            <input type="password" id="password" th:field="*{password}" class="form-control">
+<!--            <div th:errors="*{password}"/>-->
         </div>
         <hr class="my-4">
         <div class="row">

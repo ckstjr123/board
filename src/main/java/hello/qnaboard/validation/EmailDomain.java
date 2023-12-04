@@ -8,7 +8,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * example.com
+ * @Email만으로 빈 문자열, 이메일 도메인 형식까지 검증하지 못하므로 도입.
+ * gmail.com / naver.com
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
