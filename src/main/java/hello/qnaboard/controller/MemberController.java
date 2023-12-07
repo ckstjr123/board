@@ -8,6 +8,7 @@ import hello.qnaboard.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @Slf4j
@@ -38,7 +40,7 @@ public class MemberController {
      * ajax 이메일 인증 요청(회원가입 절차)
      * @param toEmail
      */
-    @PostMapping("/auth-email")
+    @PostMapping(value = "/auth-email", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> sendAuthCode(@Valid @RequestBody ToEmail toEmail, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
@@ -60,11 +62,13 @@ public class MemberController {
         return new ResponseEntity<>(toEmail + " 으로 인증번호가 전송되었습니다.", HttpStatus.OK);
     }
 
+
     /**
      * 회원가입 요청 처리
      */
     @PostMapping("/new")
-    public String join(@Valid @ModelAttribute("memberForm") MemberDto memberForm, BindingResult bindingResult, Model model) {
+    public String join(@Valid @ModelAttribute("memberForm") MemberDto memberForm, BindingResult bindingResult,
+                       Model model, HttpServletResponse response) {
 
         if (bindingResult.hasErrors()) {
             return "members/memberJoinForm";
@@ -73,7 +77,7 @@ public class MemberController {
         String email = memberForm.getEmail(); // 회원가입 이메일
         String authCode = memberForm.getEmailAuthCode(); // 검증할 인증번호
 
-        /* 이메일 인증번호 검증 및 회원가입 로직 호출 */
+        /* 이메일 인증번호 검증 및 회원 저장 로직 호출 */
         try {
             boolean isAuthCodeMatch = this.memberService.verifyEmailAuthCode(email, authCode);
             Member member = isAuthCodeMatch ? Member.createMember(memberForm) : null;
@@ -88,11 +92,13 @@ public class MemberController {
         }
          catch (EmailAuthException ex) {
             log.info("이메일 미인증 또는 인증번호 만료", ex);
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             bindingResult.rejectValue("email", null, ex.getMessage());
             return "members/memberJoinForm";
         }
          catch (DuplicateMemberException ex) {
             log.info("중복 회원가입 요청", ex);
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             bindingResult.reject(null, ex.getMessage());
             return "members/memberJoinForm";
         }

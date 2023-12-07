@@ -84,7 +84,7 @@ public class MemberService {
         String emailAuthCode = this.redisUtil.getValue(authCode_key); // 인증 요청 이메일에 대한 인증번호 조회
         if (emailAuthCode == null) {
             // 요청 이메일에 대한 인증번호가 유효하지 않음
-            throw new EmailAuthException("미인증 또는 인증 번호가 만료되었습니다. 이메일 인증을 요청해주세요.");
+            throw new EmailAuthException("미인증 또는 인증번호 만료. 이메일 인증을 요청해주세요.");
         }
 
         return emailAuthCode;

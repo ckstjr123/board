@@ -91,7 +91,7 @@
                 },
 
                 error : function(jqXHR, status, error) {
-                    alert(jqXHR.responseText);
+                    alert(jqXHR.responseText); //
                 }
             });
         }
@@ -141,7 +141,7 @@
 
         <div class="mt-4">
             <label for="email_auth_code">이메일 인증번호</label>
-            <input type="text" placeholder="인증번호 6자리 입력" id="email_auth_code" th:field="*{emailAuthCode}"
+            <input type="text" placeholder="인증번호 6자리" id="email_auth_code" th:field="*{emailAuthCode}"
                    class="form-control" maxlength="6" th:errorclass="field-error"/>
             <div class="field-error" th:errors="*{emailAuthCode}"></div>
         </div>

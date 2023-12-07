@@ -68,7 +68,6 @@ public class LoginController {
         return "redirect:" + redirectURL;
     }
 
-
     /**
      * 로그아웃
      */

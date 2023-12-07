@@ -28,11 +28,12 @@ dependencies {
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.3.1'
 	implementation 'org.springframework.boot:spring-boot-devtools'
 	implementation 'org.modelmapper:modelmapper:3.2.0' // 도메인 ↔ DTO 변환 라이브러리
-    
-	// 이메일 인증
+
+	//이메일
 	implementation 'javax.mail:javax.mail-api:1.6.2' // class file for javax.mail.internet.MimeMessage not found
 	implementation 'com.sun.mail:javax.mail:1.6.2' // 구현체
 	implementation 'org.springframework.boot:spring-boot-starter-mail:3.1.5'
+	
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis' // Redis
 	implementation 'org.springframework.session:spring-session-data-redis' // 세션 레디스에 저장(스프링 RedisSession)
 

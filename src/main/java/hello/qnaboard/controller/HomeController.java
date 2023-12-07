@@ -17,7 +17,7 @@ public class HomeController {
     @GetMapping("/")
     public String home(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) MemberDto loginMemberDto,
                        Model model) {
-        // 비로그인 사용자 및 세션에 회원 데이터가 없는 경우 일반 홈으로
+        // 비로그인 사용자 및 세션에 회원 데이터가 없는 경우 일반 홈
         if (loginMemberDto == null) {
             return "home";
         }
