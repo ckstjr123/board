@@ -62,7 +62,7 @@ public class RedisUtil {
      * @return boolean
      */
     public boolean isExists(String key) {
-        return this.stringRedisTemplate.hasKey(key);
+        return Boolean.TRUE.equals(this.stringRedisTemplate.hasKey(key));
     }
 
 }

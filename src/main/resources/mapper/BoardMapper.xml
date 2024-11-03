@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hello.qnaboard.repository.BoardMapper">
+
+    <!-- Board 저장 -->
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO board (member_id, title, view, content, board_type, reg_time)
+        VALUES (#{memberId}, #{title}, #{view}, #{content}, #{boardType}, #{regTime})
+    </insert>
+
+    <!-- 게시글 검색 조건 -->
+    <sql id="andSearchCond">
+        <choose>
+            <when test="boardSearchCond.searchTarget.equals('title_content')"><!-- '제목+내용'으로 검색한 경우 -->
+                AND (
+                     title LIKE CONCAT('%', #{boardSearchCond.searchKeyword}, '%')
+                     OR content LIKE CONCAT('%', #{boardSearchCond.searchKeyword}, '%')
+                )
+            </when>
+            <when test="boardSearchCond.searchTarget.equals('title')"><!-- '제목'으로 검색한 경우 -->
+                AND title LIKE CONCAT('%', #{boardSearchCond.searchKeyword}, '%')
+            </when>
+            <when test="boardSearchCond.searchTarget.equals('content')"><!-- '내용'으로 검색한 경우 -->
+                AND content LIKE CONCAT('%', #{boardSearchCond.searchKeyword}, '%')
+            </when>
+            <when test="boardSearchCond.searchTarget.equals('nick_name')"><!-- '작성자'로 검색한 경우 -->
+                AND name LIKE CONCAT('%', #{boardSearchCond.searchKeyword}, '%')
+            </when>
+        </choose>
+    </sql>
+
+    <select id="countByBoardType" resultType="long">
+        SELECT
+          COUNT(b.board_id)
+        FROM
+          board b
+        WHERE
+          board_type = #{boardType}
+    </select>
+
+    <!-- 검색 조건에 따른 해당 게시판 내 게시글 수 카운트 -->
+    <select id="countByBoardTypeAndSearchCond" resultType="long">
+        SELECT
+          COUNT(b.board_id)
+        FROM
+          board b
+        JOIN
+          member m ON b.member_id = m.member_id
+        WHERE
+          board_type = #{boardType}
+          <include refid="andSearchCond"></include>
+    </select>
+
+    <!-- 해당 게시판 게시글을 특정 offset부터 limit만큼 조회(검색 조건이 있으면 적용) -->
+    <select id="findBoardListWithPaging" resultType="hello.qnaboard.repository.vo.BoardListItem">
+        SELECT
+          b.board_id,
+          b.title,
+          b.board_comment_count,
+          m.member_id as writer_id,
+          m.name as writer_name,
+          b.reg_time,
+          b.view,
+          b.board_recommend_count
+        FROM
+          board b
+        JOIN
+          member m ON b.member_id = m.member_id
+        WHERE
+          b.board_type = #{boardType}
+          <if test="@org.springframework.util.StringUtils@hasText(boardSearchCond.searchKeyword) and @org.springframework.util.StringUtils@hasText(boardSearchCond.searchTarget)"><!-- 검색 타겟 및 검색 키워드가 존재할 때 -->
+              <include refid="andSearchCond"/>
+          </if>
+        ORDER BY
+          b.board_id DESC
+        LIMIT #{pageable.maxPageSize} OFFSET #{pageable.offset}
+    </select>
+
+
+<!-- (VO는 AllArgsConstructor를 통해 생성하고 있기 때문에 <association/> 생략)
+    <resultMap id="boardResultVO" type="hello.qnaboard.repository.vo.BoardVO">
+        <id property="id" column="board_id"/>
+        <result property="title" column="title"/>
+        <result property="view" column="view"/>
+        <result property="content" column="content"/>
+        <result property="boardType" column="board_type"/>
+        <result property="recommendCount" column="board_recommend_count"/>
+        <result property="commentCount" column="board_comment_count"/>
+        <result property="regTime" column="reg_time"/>
+        <result property="updateTime" column="update_time"/>
+        <association property="writerName" javaType="java.lang.String">
+            <result column="name"/> &lt;!&ndash; m.name &ndash;&gt;
+            ...
+        </association>
+    </resultMap>
+-->
+
+    <!-- 게시물 id에 해당하는 단일 게시물 조회, BoardVO로 반환 -->
+    <!-- resultMap="boardResultVO" -->
+    <select id="findById" resultType="hello.qnaboard.repository.vo.BoardVO">
+        SELECT
+          b.board_id,
+          b.title,
+          m.member_id as writer_id,
+          m.name as writer_name,
+          b.view,
+          b.content,
+          b.board_type,
+          b.board_recommend_count,
+          b.board_comment_count,
+          b.reg_time,
+          b.update_time
+        FROM board b
+        JOIN member m ON b.member_id = m.member_id
+        WHERE board_id = #{id}
+    </select>
+
+    <!-- 해당 게시물 조회수 증가 -->
+    <update id="upView">
+        UPDATE board
+        SET view = view + 1
+        WHERE board_id = #{id}
+    </update>
+
+    <!-- 게시글 수정 -->
+    <update id="update">
+        UPDATE board
+        SET title = #{updateParam.title},
+            content = #{updateParam.content},
+            update_time = #{updateParam.updateTime}
+        WHERE board_id = #{id}
+    </update>
+
+</mapper>

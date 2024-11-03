@@ -45,6 +45,15 @@
             padding-top: 10vh;
         }
 
+        #authno_email {
+            color: #FFFFFF;
+            background-color: #808090;
+            border: 1px solid #ccc;
+        }
+        #authno_email:hover {
+            color: #000000;
+        }
+
         .field-error {
             border-color: #dc3545;
             color: #dc3545;
@@ -52,26 +61,11 @@
     </style>
 
     <script>
-        // 이메일 인증 요청 시 로딩 스피너
-        $(document).ready(function() {
-            $("#loading").hide();
-
-            $(document).on("ajaxStart", function() {
-                $("#auth_email").hide();
-                $("#loading").show();
-            });
-
-            $(document).on("ajaxStop", function() {
-                $("#auth_email").show();
-                $("#loading").hide();
-            });
-        });
-
-        // 이메일 인증 요청
-        function authEmail() {
+        // 이메일 인증번호 요청
+        function authCodeEmail() {
 
             const toEmail = $("#email").val();
-            const url = "/members/auth-email";
+            const url = "/members/authno-email";
 
             const paramData = {
                   email : toEmail
@@ -80,7 +74,7 @@
 
             $.ajax({
                 url : url,
-                type : "POST",
+                type : "PUT",
                 contentType : "application/json",
                 data : param,
                 dataType : "text",
@@ -104,7 +98,7 @@
         <h2>회원 가입</h2>
     </div>
     <h4 class="mb-3">회원 정보 입력</h4>
-    <form action th:action th:object="${memberForm}" method="post">
+    <form action th:action th:object="${memberJoinForm}" method="post">
         <div th:if="${#fields.hasGlobalErrors()}">
             <p class="field-error" th:each="err : ${#fields.globalErrors()}"
                th:text="${err}">전체 오류 메시지</p>
@@ -129,19 +123,18 @@
             <div class="d-flex">
                 <input type="text" placeholder="example@gmail.com" id="email" th:field="*{email}"
                        class="form-control w-75 d-inline" th:errorclass="field-error"/>
-                <button type="button" id="auth_email" class="btn btn-outline-dark w-25 ms-3" style="border: 2px dotted #ccc;"
-                        onclick="authEmail()">
-                    <i class="fa-regular fa-envelope fa-lg me-2 h-25"></i>인증 요청</button>
-                <div id="loading" class="spinner-border m-auto" role="status"> <!-- 인증 요청 로딩 -->
+                <button type="button" id="authno_email" class="btn btn-outline-dark w-25 ms-3"
+                        onclick="authCodeEmail()">인증번호 받기</button>
+<!--                <div id="loading" class="spinner-border m-auto" role="status"> &lt;!&ndash; 인증 요청 로딩 &ndash;&gt;
                     <span class="visually-hidden">Loading...</span>
-                </div>
+                </div>-->
             </div>
             <div class="field-error" th:errors="*{email}"></div>
         </div>
 
         <div class="mt-4">
-            <label for="email_auth_code">이메일 인증번호</label>
-            <input type="text" placeholder="인증번호 6자리" id="email_auth_code" th:field="*{emailAuthCode}"
+            <label for="email_authcode">인증번호</label>
+            <input type="text" placeholder="인증번호 6자리" id="email_authcode" th:field="*{emailAuthCode}"
                    class="form-control" maxlength="6" th:errorclass="field-error"/>
             <div class="field-error" th:errors="*{emailAuthCode}"></div>
         </div>
@@ -150,7 +143,7 @@
 
         <div class="row">
             <div class="col">
-                <button class="w-100 btn btn-primary btn-lg" type="submit">회원 가입</button>
+                <button type="submit" class="w-100 btn btn-primary btn-lg">회원 가입</button>
             </div>
             <div class="col">
                 <button class="w-100 btn btn-secondary btn-lg" onclick="location.href='items.html'"

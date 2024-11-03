@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hello.qnaboard.repository.CommentMapper">
+
+    <!-- Comment 저장 -->
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO comment (board_id, member_id, comment_content, reg_time)
+        VALUES (#{boardId}, #{memberId}, #{content}, #{regTime})
+    </insert>
+
+<!--
+    <resultMap id="commentResultVO" type="hello.qnaboard.repository.vo.CommentVO">
+        <id property="id" column="comment_id"/>
+        <result property="boardId" column="board_id"/>
+        <result property="content" column="comment_content"/>
+        <result property="regTime" column="reg_time"/>
+        <association property="writerName" javaType="java.lang.String">
+            <result column="name"/> &lt;!&ndash; m.name &ndash;&gt;
+            ...
+        </association>
+    </resultMap>
+-->
+
+    <!-- Comment 단일 조회 -->
+    <select id="findById" resultType="hello.qnaboard.repository.vo.CommentVO">
+        SELECT
+          c.comment_id,
+          c.board_id,
+          m.member_id as writer_id,
+          m.name as writer_name,
+          c.comment_content,
+          c.reg_time
+        FROM comment c
+        JOIN member m ON c.member_id = m.member_id
+        WHERE comment_id = #{id}
+    </select>
+
+    <!-- 특정 게시물에 달린 모든 댓글 조회(List<CommentVO> 반환) -->
+    <select id="findByBoardId" resultType="hello.qnaboard.repository.vo.CommentVO">
+        SELECT
+          c.comment_id,
+          c.board_id,
+          m.member_id as writer_id,
+          m.name as writer_name,
+          c.comment_content,
+          c.reg_time
+        FROM comment c
+        JOIN member m ON c.member_id = m.member_id
+        WHERE c.board_id = #{boardId}
+    </select>
+
+</mapper>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<header class="p-3 text-bg-light" th:fragment="header"> <!-- 헤더 -->
+<header class="p-3 text-bg-light" style="border-bottom: 1px solid #d5d5d5;" th:fragment="header"> <!-- 헤더 -->
     <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
             <a href="https://getbootstrap.kr/"
@@ -12,15 +12,15 @@
             </a>
 
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                <li><a href="#" class="nav-link px-2 text-primary">Home</a></li>
+                <li><a href="/" class="nav-link px-2 text-primary">Home</a></li>
                 <li><a href="#" class="nav-link px-2 text-secondary">Q&A</a></li>
                 <li><a href="#" class="nav-link px-2 text-secondary">지식</a></li>
                 <li><a href="#" class="nav-link px-2 text-secondary">자유</a></li>
                 <li><a href="#" class="nav-link px-2 text-secondary">About</a></li>
             </ul>
 
-            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-                <input type="search" class="form-control form-control-dark fw-light text-bg-light"
+            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-4" role="search">
+                <input type="search" id="bd_search" class="form-control form-control-dark rounded-4 fw-light text-bg-light"
                        placeholder="게시판 통합검색" aria-label="Search">
             </form>
 
@@ -30,12 +30,11 @@
                        type="button" data-bs-toggle="dropdown" aria-expanded="false">&nbsp;</i>
                     <ul class="dropdown-menu">
                         <li>
-                            <a class="dropdown-item" href="#" th:text="|${loginMember.name}|">프로필</a>
+                            <a class="dropdown-item" href="#" th:text="${loginMember.name}">프로필</a>
                         </li>
                         <li>
                             <form th:action="@{/logout}" method="post">
-                                <button class="dropdown-item" type="submit" th:onclick="|location.href='@{/}'|">로그아웃
-                                </button>
+                                <button class="dropdown-item" type="submit">로그아웃</button>
                             </form>
                         </li>
                     </ul>
@@ -43,9 +42,9 @@
             </div>
             <div th:unless="${loginMember} != null">
                 <div class="text-end">
-                    <button type="button" class="btn btn-outline-dark me-2"
+                    <button type="button" class="btn btn-light rounded-4 me-2" style="border-color: hsla(220,9%,46%,.3);"
                             th:onclick="|location.href='@{/login}'|">로그인</button>
-                    <button type="button" class="btn btn-warning"
+                    <button type="button" class="btn btn-dark rounded-4 text-white"
                             th:onclick="|location.href='@{/members/new}'|">회원가입</button>
                 </div>
             </div>

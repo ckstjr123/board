@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>스프링 게시판 토이 프로젝트</title>
 
+    <title>스프링 게시판 토이 프로젝트</title>
     <!-- Bootstrap -->
     <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
         <symbol id="bootstrap" viewBox="0 0 118 94">
@@ -18,11 +18,15 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
             crossorigin="anonymous"></script>
+    <!-- 클립보드 복사용 -->
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script>
 
     <!-- 폰트 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gothic+A1&display=swap" rel="stylesheet">
     <!-- 아이콘 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
           integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
@@ -38,11 +42,128 @@
         }
 
         .container {
-            width: 60vw;
+            width: 55vw;
+            max-width: 55vw;
         }
 
         a {
             text-decoration: none;
+            transition: border-color .4s, box-shadow .4s, background .4s, color .4s, opacity .4s;
+        }
+
+        .board-type {
+            font-size: 22px;
+            letter-spacing: -1px;
+            margin-bottom: 10px;
+        }
+        .board-type > a {
+            font-family: "Nanum Gothic", sans-serif;
+            color: #555 !important;
+        }
+        .board-type > a:hover {
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .head-toparea {
+            background-color: #fcfcfc;
+            border-top: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+            padding: 11px 9px;
+        }
+        .head-btmarea {
+            font-size: 15px;
+            border-bottom: 1px solid #eee;
+            padding: 9px;
+        }
+        .board-title {
+            font-size: 18px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding-left: 4px;
+        }
+        .board-title > span {
+            font-family: "Gothic A1", sans-serif;
+            font-weight: bold;
+        }
+
+        .created-date::before {
+            content: "";
+            display: inline-block;
+            width: 1px;
+            height: 15px;
+            background: #ccc;
+            margin: 0 10px 0 6px;
+            vertical-align: -2px;
+        }
+        .recommend-count::before {
+            content: "";
+            display: inline-block;
+            width: 1px;
+            height: 15px;
+            background: #ccc;
+            margin: 0 8px 0 6px;
+            vertical-align: -1px;
+        }
+        #recommend_count {
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            background-color: #fcfcfc;
+        }
+
+        .addr-copy {
+            line-height: 16px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            margin-left: 6px;
+        }
+
+        .btn-vote {
+            background: none;
+            font-size: 1.2rem;
+            border: 2px solid;
+        }
+        #vote_up {
+            border-color: #1171cc;
+            border-radius: 3px;
+        }
+        #vote_down {
+            border-color: #d31900;
+            border-radius: 3px;
+        }
+
+        .view-btmbox {
+            font-size: 13px;
+            margin-top: 10px;
+        }
+        .fr-btn-wrp {
+            border: 1px solid #d3d3d3;
+            border-radius: 4px;
+        }
+        .fr-btn-wrp a {
+            color: #333;
+            letter-spacing: -1px;
+            line-height: 16px;
+            float: left;
+            padding: 6px;
+        }
+        .delete {
+            border-left: 1px solid #ddd;
+        }
+        .clear::after {
+            content: "";
+            display: block;
+            clear: both;
+        }
+
+        .comment-count::before {
+            content: "";
+            display: inline-block;
+            width: 1px;
+            height: 15px;
+            background: #ccc;
+            margin: 0 8px 0 6px;
+            vertical-align: -1px;
         }
         .comment-bubble:hover {
             text-decoration: underline;
@@ -50,23 +171,20 @@
         .comment-creator:hover {
             text-decoration: underline;
         }
-
         .comment-meta {
             font-size: 12px;
             margin-bottom: 5px;
         }
         .comment-creator {
-            font-family: -apple-system,blinkmacsystemfont,helveticaneue,apple sd gothic neo,sans-serif;
+            font-family: "Gothic A1", sans-serif;
             font-weight: bold;
             color: #444444;
         }
         .comment-date {
-            font-family: 'Apple SD Gothic Neo','Malgun Gothic','맑은 고딕',arial,sans-serif;
             color: #888888;
             margin-left: 12px;
         }
-        .comment-text {
-            font-family: 'Apple SD Gothic Neo','Malgun Gothic','맑은 고딕',arial,sans-serif;
+        .comment-content {
             font-size: 13px;
         }
         .cmd-editor-text {
@@ -75,110 +193,119 @@
             resize: none;
         }
     </style>
+
+    <script>
+        function copyBoardUrl() {
+            const clipboard = new ClipboardJS('.addr-copy');
+
+            clipboard.on('success', function(e) {
+                alert(e.text + " 복사되었습니다.");
+                e.clearSelection();
+                clipboard.destroy();
+            });
+
+            clipboard.on('error', function(e) {
+                console.error('Action:', e.action);
+                console.error('Trigger:', e.trigger);
+            });
+        }
+    </script>
 </head>
 
 <body class="d-flex flex-column">
 <th:block th:replace="/fragments/header.html :: header"></th:block>
 
-<main class="container mt-5">
+<main class="container mt-5" th:with="bdType=${board.boardType.toLowerCase()}">
+    <div style="padding-left: 4px;">
+        <h2 class="board-type fw-bold">
+            <a th:href="@{'/' + ${bdType}}" class="text-dark" th:text="${{board.boardType}} + ' 게시판'">게시판 명</a>
+        </h2>
+    </div>
 
-    <h2 class="board-title fw-bold ps-1"><a href="#" class="text-dark">ㅇㅇ 게시판</a></h2>
-    <table class="table table-group-divider mt-3">
-        <colgroup>
-            <col style="width: 15%"/> <!-- 글 번호 / 작성자 / 제목 -->
-            <col style="width: 35%"/>
-            <col style="width: 15%"/> <!-- 조회수 / 작성일 -->
-            <col style="width: 35%"/>
-        </colgroup>
-        <tbody>
-        <tr>
-            <th scope="row">글 번호</th>
-            <td th:text="${board.boardIdx}">1</td>
-            <th scope="row">조회수</th>
-            <td th:text="${board.hitCnt}">10</td>
-        </tr>
-        <tr>
-            <th scope="row">작성자</th>
-            <td th:text="${board.creatorId}">회원</td>
-            <th scope="row">작성일</th>
-            <td th:text="${#temporals.format(board.createdDatetime, 'yyyy-MM-dd HH:mm:ss')}">작성한 날짜</td>
-        </tr>
-        <tr>
-            <th scope="row">제목</th>
-            <td colspan="3">
-                <input type="text" class="border-0 bg-white fw-bold w-100 px-0"
-                       th:value="${board.title}" value="제목은 40자 이내로 입력해주세요" disabled/>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="4">
-                <!--                <textarea title="내용" class="form-control"th:text="${board.content}">게시글 내용</textarea>-->
-                <div th:text="${board.content}">
-                    게시글 내용 10,000자 이하
-                </div>
-
-                <div class="text-center mt-4">
-                    <span>
-                        <a href="javascript:ajax()" class="link-secondary">
-                            <i class="fa-solid fa-thumbs-up fa-lg"></i>
-                            <span class="votenow text-dark">0(추천수)</span>
-                        </a>
-                    </span>
-                </div>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-
-    <div name="comment">
-        <div class="form-control" style="border: 1px solid #cccccc;">
-            <a href="댓글창 열기/닫기" class="comment-bubble text-dark" style="font-size: 13.5px;">
-                댓글 <span class="fw-bold">4</span>개
-            </a>
-            <!--            <a class="float-end">댓글 새로고침</a></span>-->
+    <article th:object="${board}" th:data-board-id="${board.id}" style="border-bottom: 1px solid #ddd; padding-bottom: 15px;">
+        <div class="head-toparea">
+            <h1 class="board-title m-0">
+                <span th:text="*{title}">게시글 제목</span>
+            </h1>
         </div>
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item ">
-                <div class="comment-meta">
-                    <a href="" class="comment-creator">작성자(회원1)</a>
-                    <span class="comment-date fw-light">작성된 시각</span>
-                </div>
-                <div class="comment-text">첫번째로 달린 댓글</div>
-            </li>
-            <li class="list-group-item ">
-                <div class="comment-meta">
-                    <a href="" class="comment-creator">작성자(회원2)</a>
-                    <span class="comment-date fw-light">작성된 시각</span>
-                </div>
-                <div class="comment-text">두번째 댓글</div>
-            </li>
-            <li class="list-group-item ">
-                <div class="comment-meta">
-                    <a href="" class="comment-creator">작성자(회원3)</a>
-                    <span class="comment-date fw-light">작성된 시각</span>
-                </div>
-                <div class="comment-text">세번째 댓글</div>
-            </li>
-            <li class="list-group-item ">
-                <div class="comment-meta">
-                    <a href="" class="comment-creator">작성자(회원4)</a>
-                    <span class="comment-date fw-light">작성된 시각</span>
-                </div>
-                <div class="comment-text">네번째 댓글</div>
-            </li>
-        </ul>
+        <div class="head-btmarea overflow-hidden">
+            <div class="d-inline-block">
+                <span class="nickname" th:text="*{writerName}">닉네임</span> <!-- 작성자 작성 글 보기 추가(writerId) -->
+                <span class="created-date" th:text="${#temporals.format(board.regTime,'yyyy-MM-dd HH:mm')}">2024.01.18 10:43:40</span> <!-- 날짜 포맷팅 필요 -->
+            </div>
+            <div class="float-end fw-light">
+                <span class="view">조회&nbsp;<b th:text="*{view}">0</b></span>
+                <span class="recommend-count">추천&nbsp;<b th:text="*{recommendCount}">0</b></span>
+                <span class="comment-count">댓글&nbsp;<b th:text="*{commentCount}">0</b></span>
+            </div>
+        </div>
 
-        <div class="mb-4" style="border-top: 1px solid #dee2e6;"><!-- 댓글 페이지네이션 생략 --></div>
+        <!-- 게시글 원문 url 복사 기능(추가) -->
+        <div class="address text-end mt-2" style="padding: 0 9px 10px 0; font-size: 12px; margin-top">
+            <a th:href="@{/{boardType}/{boardId} (boardType=${bdType}, boardId=*{id})}" class="text-secondary" th:text="${boardUrl}">게시물 url</a>
+            <button class="addr-copy bg-white" th:data-clipboard-text="${boardUrl}" onclick="copyBoardUrl()">복사하기</button>
+        </div>
 
-        <div class="cmt_editor form-control px-3" style="padding-top: 12px; padding-bottom: 20px;">
-            <label for="게시글id" class="mb-2">
-                <strong style="padding-left: 5px;">댓글 쓰기</strong>
+        <!-- summernote 에디터에서 직접 타이핑한 태그는 이스케이프 문자로 처리되며, summernote 자체 삽입된 태그가 HTML 엔티티로 렌더링되기 때문에
+             th:utext 적용(타임리프 th:text는 자체적으로 escape 기능을 기본 지원) -->
+        <div class="bd-content" style="padding: 0 9px; margin-bottom: 30px;" th:utext="*{content}">
+            게시글 내용
+        </div>
+
+        <!--추천 / 비추-->
+        <div class="board-recommend text-center fs-5" style="word-break: break-all;">
+            <button id="vote_up" class="btn-vote">
+                <i class="fa-regular fa-thumbs-up fa-lg" style="color: #1171cc;"></i>
+            </button>
+            <span id="recommend_count" class="d-inline-block text-dark px-2 mx-2">0</span>
+            <button id="vote_down" class="btn-vote">
+                <i class="fa-regular fa-thumbs-down fa-lg" style="color: #d31900;"></i>
+            </button>
+        </div>
+    </article>
+
+    <!-- 해당 게시물 작성자에겐 수정 및 삭제 버튼 노출 -->
+    <div th:if="${loginMember} != null and ${#strings.equals(board.writerId, loginMember.memberId)}" class="view-btmbox clear">
+        <div class="fr-btn-wrp float-end">
+            <a th:href="@{/{boardType}/{boardId}/edit (boardType=${bdType}, boardId=${board.id})}" class="edit"><i style="" class="fa-regular fa-pen-to-square me-1"></i>수정</a>
+            <a class="delete"><i class="fa-regular fa-trash-can me-1"></i>삭제</a>
+        </div>
+    </div>
+
+    <div class="board-comment" name="comment" style="margin-top: 20px;">
+        <!--(해당 게시글에 달린 댓글이 있으면)-->
+        <th:block th:if="${!#lists.isEmpty(commentList)}">
+            <div class="form-control" style="border: 1px solid #cccccc;">
+                <!-- 댓글 보기/숨기기 기능(추가) -->
+                <a href="댓글창 열기/닫기" class="comment-bubble text-dark" style="font-size: 13.5px;">
+                    댓글&nbsp;<span class="fw-bold" th:text="${board.commentCount}">4</span>개
+                </a>
+            </div>
+
+            <ul id="cmt_list" class="list-group list-group-flush"> <!-- 댓글 리스트 -->
+                <li th:each="comment : ${commentList}" th:data-comment-id="${comment.id}" class="list-group-item">
+                    <div class="comment-meta">
+                        <a href="#" class="comment-creator" th:text="${comment.writerName}">댓글 작성자</a>
+                        <span class="comment-date fw-light" th:text="${#temporals.format(comment.regTime,'yyyy-MM-dd HH:mm')}">댓글 작성 시각</span>
+                    </div>
+                    <div class="comment-content" th:text="${comment.content}">댓글 내용</div>
+                </li>
+            </ul>
+
+            <div class="mb-4" style="border-top: 1px solid #dee2e6;"></div>
+            <!-- 댓글 더보기(추가) -->
+        </th:block>
+
+        <!--댓글 작성-->
+        <div class="cmt_editor form-control px-3" style="padding-top: 12px; padding-bottom: 20px; margin-bottom: 15px;">
+            <label for="cmt_write" class="mb-2">
+                <strong style="font-size: 15px; padding-left: 5px;">댓글 쓰기</strong>
             </label>
             <div class="cmd-editor_write d-flex justify-content-center">
-                <textarea id="게시글id" class="cmd-editor-text form-control me-2"
+                <!-- ㅇㅇ님, 답글을 작성해주세요. (로그인 사용자) -->
+                <textarea id="cmt_write" class="cmd-editor-text form-control me-2" style="border-radius: 2px;"
                           placeholder="댓글을 작성하려면 로그인해 주세요. 로그인 하시겠습니까?" onclick=""></textarea>
-                <!-- <textarea th:id="" id="comment_write_게시물 번호"></textarea>-->
-                <input type="button" value="등록" class="comment_write" style="width: 80px;" disabled="disabled">
+                <input type="button" value="등록" class="cmt-submit" style="width: 80px;" disabled>
             </div>
         </div>
     </div>

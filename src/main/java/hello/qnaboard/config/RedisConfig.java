@@ -5,12 +5,11 @@ import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
  * Redis와의 연결 정보를 설정,
@@ -26,7 +25,9 @@ public class RedisConfig {
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         // Redis Java 클라이언트 라이브러리인 Lettuce를 사용해서 Redis 서버와 연결해줌
-        return new LettuceConnectionFactory(this.redisProperties.getHost(), this.redisProperties.getPort());
+        RedisStandaloneConfiguration redisStandaloneConfig = new RedisStandaloneConfiguration(this.redisProperties.getHost(), this.redisProperties.getPort());
+        redisStandaloneConfig.setPassword(this.redisProperties.getPassword());
+        return new LettuceConnectionFactory(redisStandaloneConfig);
     }
 
     /**

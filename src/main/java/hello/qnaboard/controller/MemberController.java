@@ -1,7 +1,8 @@
 package hello.qnaboard.controller;
 
+import hello.qnaboard.controller.dto.MemberJoinForm;
+import hello.qnaboard.controller.dto.ToEmail;
 import hello.qnaboard.domain.Member;
-import hello.qnaboard.dto.MemberDto;
 import hello.qnaboard.exception.DuplicateMemberException;
 import hello.qnaboard.exception.EmailAuthException;
 import hello.qnaboard.service.MemberService;
@@ -10,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.MailException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,17 +32,17 @@ public class MemberController {
      */
     @GetMapping("/new")
     public String joinForm(Model model) {
-        model.addAttribute("memberForm", new MemberDto());
+        model.addAttribute("memberJoinForm", new MemberJoinForm());
         return "members/memberJoinForm";
     }
 
     /**
-     * ajax 이메일 인증 요청(회원가입 절차)
+     * ajax 이메일 인증번호 요청(회원가입 절차)
      * @param toEmail
      */
-    @PostMapping(value = "/auth-email", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> sendAuthCode(@Valid @RequestBody ToEmail toEmail, BindingResult bindingResult) {
-
+    @PutMapping(value = "/authno-email", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> sendAuthCode(@RequestBody @Valid ToEmail toEmail, BindingResult bindingResult) {
+        
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(bindingResult.getFieldError("email").getDefaultMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -51,15 +51,11 @@ public class MemberController {
             this.memberService.sendAuthCodeToEmail(toEmail.toString()); // 인증을 요청한 이메일로 인증번호 전송
         }
          catch (DuplicateMemberException ex) {
-            log.info("기존 회원에 대한 이메일 인증 요청 거부", ex);
+            log.error("기존 회원에 대한 이메일 인증 요청 거부", ex);
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
-         catch (MailException ex) {
-            log.info("이메일 인증번호 전송 실패", ex);
-            return new ResponseEntity<>("인증번호 전송에 실패했습니다. " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
 
-        return new ResponseEntity<>(toEmail + " 으로 인증번호가 전송되었습니다.", HttpStatus.OK);
+        return new ResponseEntity<>(toEmail + "으로 인증번호가 전송되었습니다.", HttpStatus.OK);
     }
 
 
@@ -67,20 +63,25 @@ public class MemberController {
      * 회원가입 요청 처리
      */
     @PostMapping("/new")
-    public String join(@Valid @ModelAttribute("memberForm") MemberDto memberForm, BindingResult bindingResult,
-                       Model model, HttpServletResponse response) {
+    public String join(@ModelAttribute @Valid MemberJoinForm memberJoinForm, BindingResult bindingResult, HttpServletResponse response) {
 
         if (bindingResult.hasErrors()) {
             return "members/memberJoinForm";
         }
 
-        String email = memberForm.getEmail(); // 회원가입 이메일
-        String authCode = memberForm.getEmailAuthCode(); // 검증할 인증번호
+        String nickname = memberJoinForm.getName();
+        String email = memberJoinForm.getEmail(); // 회원가입 이메일
+        String password = memberJoinForm.getPassword();
 
-        /* 이메일 인증번호 검증 및 회원 저장 로직 호출 */
+        /* 이메일 인증 체크 및 회원 저장 로직 호출 */
         try {
-            boolean isAuthCodeMatch = this.memberService.verifyEmailAuthCode(email, authCode);
-            Member member = isAuthCodeMatch ? Member.createMember(memberForm) : null;
+            if (this.memberService.checkDuplicatedNickname(nickname)) {
+                bindingResult.rejectValue("name", null, "이미 사용 중인 닉네임입니다.");
+                return "members/memberJoinForm";
+            }
+            
+            boolean isAuthCodeMatch = this.memberService.verifyEmailAuthCode(email, memberJoinForm.getEmailAuthCode());
+            Member member = isAuthCodeMatch ? Member.createMember(nickname, email, password) : null;
             if (member == null) {
                 // 이메일 인증번호 불일치
                 bindingResult.rejectValue("emailAuthCode", null, "인증 번호가 틀립니다.");
@@ -91,19 +92,19 @@ public class MemberController {
             log.info("신규 회원가입: {}", member);
         }
          catch (EmailAuthException ex) {
-            log.info("이메일 미인증 또는 인증번호 만료", ex);
+            log.error("이메일 미인증 또는 인증번호 만료", ex);
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             bindingResult.rejectValue("email", null, ex.getMessage());
             return "members/memberJoinForm";
         }
          catch (DuplicateMemberException ex) {
-            log.info("중복 회원가입 요청", ex);
+            log.error("중복 회원가입 요청", ex);
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             bindingResult.reject(null, ex.getMessage());
             return "members/memberJoinForm";
         }
 
-        return "redirect:/"; // 회원가입 성공 후 홈으로 리다이렉트
+        return "redirect:/"; // 회원가입 성공하면 홈으로 리다이렉트
     }
 
 }

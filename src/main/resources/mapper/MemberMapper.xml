@@ -3,15 +3,32 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="hello.qnaboard.repository.MemberMapper">
 
+    <!-- 닉네임 중복 체크 용도 -->
+    <select id="existsByName" resultType="boolean">
+        SELECT
+          COUNT(m.member_id)
+        FROM
+          member m
+        WHERE
+          m.name = #{nickname};
+    </select>
+
     <!-- Member 저장 -->
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO member (name, email, password, role, reg_time)
         VALUES (#{name}, #{email}, #{password}, #{role}, #{regTime})
     </insert>
 
+    <!-- id로 Member 조회 -->
+    <select id="findById" resultType="Member"> <!-- hello.qnaboard.domain.Member -->
+        SELECT member_id as id, name, email, password, role, reg_time, update_time
+        FROM member
+        WHERE member_id = #{id};
+    </select>
+
     <!-- 이메일로 Member 조회 -->
-    <select id="findByEmail" resultType="Member"> <!-- hello.qnaboard.domain.Member -->
-        SELECT member_id as id, name, email, password, role, reg_time, modified_by, update_time
+    <select id="findByEmail" resultType="Member">
+        SELECT member_id as id, name, email, password, role, reg_time, update_time
         FROM member
         WHERE email = #{email}
     </select>
@@ -21,7 +38,6 @@
         UPDATE member
         SET name=#{updateParam.name},
             password=#{updateParam.password},
-            modified_by=#{updateParam.modifiedBy},
             update_time=#{updateParam.updateTime}
         WHERE member_id = #{id}
     </update>
