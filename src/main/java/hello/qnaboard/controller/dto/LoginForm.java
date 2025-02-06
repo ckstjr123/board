@@ -1,4 +1,4 @@
-package hello.qnaboard.controller;
+package hello.qnaboard.controller.dto;
 
 import hello.qnaboard.validation.EmailDomain;
 import lombok.Getter;

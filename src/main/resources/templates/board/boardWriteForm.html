@@ -33,8 +33,10 @@
 
     <!-- summernote editor -->
     <script th:src="@{/summernote/js/summernote-lite.js}" src="../summernote/js/summernote-lite.js"></script>
-    <script th:src="@{/summernote/js/lang/summernote-ko-KR.js}" src="../summernote/js/lang/summernote-ko-KR.js"></script>
-    <link rel="stylesheet" th:href="@{/summernote/css/summernote-lite.css}" href="../summernote/css/summernote-lite.css"/>
+    <script th:src="@{/summernote/js/lang/summernote-ko-KR.js}"
+            src="../summernote/js/lang/summernote-ko-KR.js"></script>
+    <link rel="stylesheet" th:href="@{/summernote/css/summernote-lite.css}"
+          href="../summernote/css/summernote-lite.css"/>
 
     <style>
         body {
@@ -72,7 +74,6 @@
         $(document).ready(function() {
            $('#summernote').summernote({
               minHeight: 450,             // 에디터 높이
-              maxHeight: 450,
               focus: true,                // 에디터 로딩후 포커스를 맞출지 여부
               lang: "ko-KR",
               placeholder: '최대 10,000자까지 작성할 수 있습니다.',
@@ -86,9 +87,37 @@
                 ['view', ['help']],
               ],
               
-              styleTags: [ 'h1', 'h2', 'h3'],
+              styleTags: ['h1', 'h2', 'h3'],
+
+              callbacks: {
+                onImageUpload: function(images) {
+                  uploadImages(images, this); // upload images to server
+                }
+              }
            });
 		})
+
+        function uploadImages(images, el) {
+            const formData = new FormData();
+            for (var i = 0; i < images.length; i++) {
+                formData.append("file", images[i]);
+            }
+
+     	    $.ajax({
+		        data: formData,
+		        type: "POST",
+		        url: '/files/upload',
+		        contentType: false,
+		        processData: false,
+		        enctype: 'multipart/form-data',
+		        success: function(imageUrls) {
+		            imageUrls.forEach((imageUrl) => {
+		               console.log(imageUrl);
+		               $(el).summernote('insertImage', imageUrl);
+		            });
+		        }
+	        });
+	    }
     </script>
 </head>
 
@@ -98,7 +127,7 @@
 <div class="container mt-5">
     <h2 class="board-title fw-bold"><a href="#" class="text-dark" th:text="|${{boardType}} 게시판|">ㅇㅇ 게시판</a></h2>
 
-    <form method="post" th:action th:object="${boardWriteForm}" class="mt-4">
+    <form method="post" th:action th:object="${boardWriteForm}" class="mt-4" enctype="multipart/form-data">
         <input th:field="*{title}" class="title px-2" placeholder="제목을 입력해주세요." maxlength="40"><!--게시글 제목-->
         <div class="field-error text-danger" th:errors="*{title}"></div>
         <textarea id="summernote" th:field="*{content}"></textarea><!--게시글 내용-->
@@ -106,7 +135,8 @@
 
         <div class="py-3 d-flex justify-content-end">
             <button type="button" th:onclick="|location.href='@{/{boardType} (boardType=${boardType.toLowerCase()})}'|"
-                    class="btn btn-secondary me-3" style="width:80px; height: 40px;">취소</button>
+                    class="btn btn-secondary me-3" style="width:80px; height: 40px;">취소
+            </button>
             <button type="submit" class="btn btn-success" style="width:80px; height: 40px;">등록</button>
         </div>
     </form>

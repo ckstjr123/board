@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * 게시물 상세 페이지에 전달할 게시물 및 답글 VO.
- * Nested Select 방식으로 각각 조회한 BoardVO와 List<CommentVO>를 합쳐서 반환하기 위한 용도
+ * 각각 조회한 BoardVO와 List<CommentVO>를 합쳐서 반환하는 용도
  */
 @Getter
 @EqualsAndHashCode

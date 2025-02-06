@@ -58,7 +58,6 @@ public class MemberController {
         return new ResponseEntity<>(toEmail + "으로 인증번호가 전송되었습니다.", HttpStatus.OK);
     }
 
-
     /**
      * 회원가입 요청 처리
      */
@@ -76,7 +75,7 @@ public class MemberController {
         /* 이메일 인증 체크 및 회원 저장 로직 호출 */
         try {
             if (this.memberService.checkDuplicatedNickname(nickname)) {
-                bindingResult.rejectValue("name", null, "이미 사용 중인 닉네임입니다.");
+                bindingResult.rejectValue("name", null, "사용 중인 닉네임입니다.");
                 return "members/memberJoinForm";
             }
             

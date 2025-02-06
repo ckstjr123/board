@@ -76,10 +76,10 @@ public class BoardService {
      */
     @Transactional(readOnly = false)
     public BoardWithCommentsVO boardDetail(Long boardId) {
-        this.boardMapper.upView(boardId); // 조회수 up
-
         BoardVO boardVO = this.boardMapper.findById(boardId).orElseThrow(() -> new EmptyResultDataAccessException("게시물이 존재하지 않거나 삭제되었습니다.", 1));
+        this.boardMapper.upView(boardId); // 조회수 up
         List<CommentVO> commentVOList = this.commentMapper.findByBoardId(boardId);
+
         return new BoardWithCommentsVO(boardVO, commentVOList);
     }
 
@@ -97,7 +97,7 @@ public class BoardService {
 
 
     /**
-     * 게시글 존재 여부, 권한 검증.
+     * 게시글 존재 여부 및 권한 검증.
      * 로그인 사용자가 해당 게시글 작성자면 게시글 VO 반환
      * @param boardId
      * @param memberId

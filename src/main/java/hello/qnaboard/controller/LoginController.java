@@ -1,6 +1,7 @@
 package hello.qnaboard.controller;
 
 import hello.qnaboard.constant.SessionConst;
+import hello.qnaboard.controller.dto.LoginForm;
 import hello.qnaboard.domain.Member;
 import hello.qnaboard.service.LoginService;
 import lombok.RequiredArgsConstructor;

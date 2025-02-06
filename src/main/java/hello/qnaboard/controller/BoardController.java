@@ -82,8 +82,7 @@ public class BoardController {
         model.addAttribute("commentList", commentVoList);
         return "board/boardDetail";
     }
-
-
+    
     /**
      * 게시물 작성 폼
      */
