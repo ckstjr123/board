@@ -39,7 +39,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String email = oAuth2Response.getEmail();
         String name = oAuth2Response.getName();
 
-        /* 닉네임도 통일해서 관리하고 회원 정보 수정을 통해 닉변 가능하도록 구현 */
+        /* 닉네임도 통일해서 관리하고 회원 정보 수정을 통해 닉변 가능하도록 구현(닉네임 중복 허용) */
         Member member = this.findOrSaveUser(email, name);
 
         // oauth2 로그인 시 스프링 시큐리티가 세션에 저장하는 인증 객체: 'OAuth2AuthenticationToken'

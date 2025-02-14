@@ -30,10 +30,8 @@ public class MemberService implements UserDetailsService {
 
     /**
      * 회원가입 시 이메일 인증 요청
-     *
      * @param toEmail
      * @throws DuplicateMemberException
-     * @throws org.springframework.mail.MailException 인증번호 전송 실패
      */
     public void sendAuthCodeToEmail(String toEmail) {
         // 이미 가입된 회원이면 인증번호 발급 X
@@ -66,19 +64,7 @@ public class MemberService implements UserDetailsService {
     }
 
     /**
-     * 닉네임 중복 체크
-     *
-     * @param nickname
-     * @return 중복 닉네임이면 true
-     */
-    @Transactional
-    public boolean checkDuplicatedNickname(String nickname) {
-        return this.memberMapper.existsByName(nickname);
-    }
-
-    /**
      * 이메일을 통해 이미 가입된 회원인지 확인
-     *
      * @param email
      * @throws DuplicateMemberException
      */
@@ -151,8 +137,6 @@ public class MemberService implements UserDetailsService {
         return member.getId();
     }
 
-
-
     /**
      * 이메일로 조회해서 반환한 유저 정보를 토대로 DaoAuthenticationProvider에서 로그인 검증이 수행됨
      * @param email
@@ -169,4 +153,15 @@ public class MemberService implements UserDetailsService {
         userDetails.setPassword(member.getPassword()); // 로그인 검증에 사용될 비밀번호 세팅. 인증을 완료하면 null로 초기화 됨
         return userDetails;
     }
+
+/*    *//**
+     * 닉네임 중복 체크
+     * @param nickname
+     * @return 중복 닉네임이면 true
+     *//*
+    @Transactional
+    public boolean checkDuplicateName(String nickname) {
+        return this.memberMapper.existsByName(nickname);
+    }
+*/
 }

@@ -69,7 +69,7 @@ public class MemberMapperTest {
     }
 
     @Test
-    @DisplayName("닉네임 중복 확인")
+    @DisplayName("닉네임 중복 체크")
     void existsByName() {
         Member member = this.createMember();
         this.memberMapper.save(member);

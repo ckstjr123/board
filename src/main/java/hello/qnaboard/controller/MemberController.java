@@ -70,22 +70,16 @@ public class MemberController {
             return "members/memberJoinForm";
         }
 
-        String nickname = memberJoinForm.getName();
+        String name = memberJoinForm.getName();
         String email = memberJoinForm.getEmail(); // 회원가입 이메일
         String password = memberJoinForm.getPassword();
 
         /* 이메일 인증 체크 및 회원 저장 로직 호출 */
         try {
-            if (this.memberService.checkDuplicatedNickname(nickname)) {
-                bindingResult.rejectValue("name", null, "사용 중인 닉네임입니다.");
-                return "members/memberJoinForm";
-            }
-            
             boolean isAuthCodeMatch = this.memberService.verifyEmailAuthCode(email, memberJoinForm.getEmailAuthCode());
-            Member member = isAuthCodeMatch ? Member.createMember(nickname, email, this.passwordEncoder.encode(password)) : null;
+            Member member = isAuthCodeMatch ? Member.createMember(name, email, this.passwordEncoder.encode(password)) : null;
             if (member == null) {
-                // 이메일 인증번호 불일치
-                bindingResult.rejectValue("emailAuthCode", null, "인증 번호가 틀립니다.");
+                bindingResult.rejectValue("emailAuthCode", null, "인증 번호를 다시 확인해 주세요.");
                 return "members/memberJoinForm";
             }
 
