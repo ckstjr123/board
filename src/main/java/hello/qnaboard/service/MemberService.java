@@ -25,7 +25,8 @@ public class MemberService implements UserDetailsService {
     private final MemberMapper memberMapper;
     private final EmailService emailService;
     private final RedisUtil redisUtil;
-    public static final String EMAIL_AUTH_KEY_PREFIX = "auth_code#";
+    private static final String EMAIL_AUTH_KEY_PREFIX = "auth_code#";
+    private static final int EMAIL_AUTH_CODE_LEN = 6;
 
     /**
      * 회원가입 시 이메일 인증 요청
@@ -54,8 +55,7 @@ public class MemberService implements UserDetailsService {
         try {
             Random numberGenerator = SecureRandom.getInstance("SHA1PRNG");
 
-            int length = 6;
-            for (int i = 0; i < length; i++) {
+            for (int i = 0; i < EMAIL_AUTH_CODE_LEN; i++) {
                 sb.append(numberGenerator.nextInt(10)); // 0부터 10 미만 중
             }
         } catch (NoSuchAlgorithmException ex) {

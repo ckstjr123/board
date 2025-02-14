@@ -39,7 +39,7 @@ public class Member {
         Member member = new Member();
         member.name = name;
         member.email = email;
-        member.password = password; // 패스워드 암호화 생략
+        member.password = password;
         member.role = Role.USER;
 
         // 년-월-일 시:분:초:fractional seconds(timestamp(6)으로 지정했으므로 MySQL DB에는 yyyy-MM-dd HH:mm:ss:SSSSSS 형식으로 저장됨)

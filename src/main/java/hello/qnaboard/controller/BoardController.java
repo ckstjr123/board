@@ -74,13 +74,10 @@ public class BoardController {
                               @AuthenticationPrincipal SessionMember loginMember, HttpServletRequest request, Model model) {
         BoardWithCommentsVO boardWithCommentsVO = this.boardService.boardDetail(boardId); // 해당 게시물 조회
 
-        BoardVO boardVO = boardWithCommentsVO.getBoardVO();
-        List<CommentVO> commentVoList = boardWithCommentsVO.getCommentVoList();
-
         model.addAttribute("loginMember", loginMember);
-        model.addAttribute("board", boardVO);
+        model.addAttribute("board", boardWithCommentsVO.getBoardVO());
         model.addAttribute("boardUrl", request.getRequestURL()); // 게시물 url
-        model.addAttribute("commentList", commentVoList);
+        model.addAttribute("commentList", boardWithCommentsVO.getCommentVoList());
         return "board/boardDetail";
     }
     
