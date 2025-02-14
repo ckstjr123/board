@@ -54,7 +54,7 @@ public class MemberService implements UserDetailsService {
         try {
             Random numberGenerator = SecureRandom.getInstance("SHA1PRNG");
 
-            int length = 6; // 인증번호는 6자리
+            int length = 6;
             for (int i = 0; i < length; i++) {
                 sb.append(numberGenerator.nextInt(10)); // 0부터 10 미만 중
             }
@@ -166,7 +166,7 @@ public class MemberService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(email));
 
         SessionMember userDetails = new SessionMember(member.getId(), member.getName());
-        userDetails.setPassword(member.getPassword()); // 로그인 검증에 사용될 비밀번호 세팅. 인증을 완료하고 null로 초기화 됨
+        userDetails.setPassword(member.getPassword()); // 로그인 검증에 사용될 비밀번호 세팅. 인증을 완료하면 null로 초기화 됨
         return userDetails;
     }
 }

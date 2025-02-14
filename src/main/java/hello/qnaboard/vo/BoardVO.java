@@ -1,4 +1,4 @@
-package hello.qnaboard.repository.vo;
+package hello.qnaboard.vo;
 
 import hello.qnaboard.constant.BoardType;
 import lombok.*;

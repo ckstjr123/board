@@ -2,7 +2,7 @@ package hello.qnaboard.modelmapper;
 
 import hello.qnaboard.constant.BoardType;
 import hello.qnaboard.repository.dto.BoardUpdateForm;
-import hello.qnaboard.repository.vo.BoardVO;
+import hello.qnaboard.vo.BoardVO;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 

@@ -5,7 +5,7 @@ import hello.qnaboard.controller.dto.MemberJoinForm;
 import hello.qnaboard.domain.Board;
 import hello.qnaboard.domain.Comment;
 import hello.qnaboard.domain.Member;
-import hello.qnaboard.repository.vo.CommentVO;
+import hello.qnaboard.vo.CommentVO;
 import hello.qnaboard.service.BoardWriteForm;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;

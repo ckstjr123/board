@@ -1,6 +1,6 @@
 package hello.qnaboard.repository.dto;
 
-import hello.qnaboard.repository.vo.BoardVO;
+import hello.qnaboard.vo.BoardVO;
 import lombok.Getter;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;

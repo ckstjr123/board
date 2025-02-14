@@ -1,7 +1,7 @@
 package hello.qnaboard.repository;
 
 import hello.qnaboard.domain.Comment;
-import hello.qnaboard.repository.vo.CommentVO;
+import hello.qnaboard.vo.CommentVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

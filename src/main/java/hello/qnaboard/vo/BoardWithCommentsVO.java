@@ -1,7 +1,5 @@
-package hello.qnaboard.service;
+package hello.qnaboard.vo;
 
-import hello.qnaboard.repository.vo.BoardVO;
-import hello.qnaboard.repository.vo.CommentVO;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;

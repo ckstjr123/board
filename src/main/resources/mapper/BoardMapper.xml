@@ -53,7 +53,7 @@
     <!-- VO 객체는 AllArgsConstructor 통해 생성되어 반환됨 -->
 
     <!-- 해당 게시판 게시글을 특정 offset부터 limit만큼 조회(검색 조건이 있으면 적용) -->
-    <select id="findBoardListWithPaging" resultType="hello.qnaboard.repository.vo.BoardListItem">
+    <select id="findBoardListWithPaging" resultType="hello.qnaboard.vo.BoardListItem">
         SELECT
           b.board_id,
           b.title,
@@ -77,7 +77,7 @@
 
     <!-- 게시물 id에 해당하는 단일 게시물 조회, BoardVO로 반환 -->
     <!-- resultMap="boardResultVO" -->
-    <select id="findById" resultType="hello.qnaboard.repository.vo.BoardVO">
+    <select id="findById" resultType="hello.qnaboard.vo.BoardVO">
         SELECT
           b.board_id,
           b.title,
