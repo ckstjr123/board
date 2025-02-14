@@ -12,8 +12,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BoardSearchCond {
-
     private String searchTarget; // "title_content"(제목+내용), "title"(제목), "content"(내용), "nick_name"(작성자)
-
     private String searchKeyword; // 검색어
 }

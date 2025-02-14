@@ -125,9 +125,6 @@
                        class="form-control w-75 d-inline" th:errorclass="field-error"/>
                 <button type="button" id="authno_email" class="btn btn-outline-dark w-25 ms-3"
                         onclick="authCodeEmail()">인증번호 받기</button>
-<!--                <div id="loading" class="spinner-border m-auto" role="status"> &lt;!&ndash; 인증 요청 로딩 &ndash;&gt;
-                    <span class="visually-hidden">Loading...</span>
-                </div>-->
             </div>
             <div class="field-error" th:errors="*{email}"></div>
         </div>
@@ -153,6 +150,15 @@
             </div>
         </div>
     </form>
+
+    <hr class="mt-5 mb-4">
+
+    <!-- 소셜 로그인 -->
+    <div class="oauth2-login d-flex justify-content-center gap-2">
+        <a href="/oauth2/authorization/google"><img src="/image/social/google.png" alt="구글 로그인"></a>
+        <a href="/oauth2/authorization/naver"><img src="/image/social/naver.png" alt="네이버 로그인"></a>
+        <a href="/oauth2/authorization/kakao"><img src="/image/social/kakao.png" alt="카카오 로그인"></a>
+    </div>
 </div> <!-- /container -->
 
 </body>

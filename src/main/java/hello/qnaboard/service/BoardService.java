@@ -64,7 +64,7 @@ public class BoardService {
         Member writer = this.memberService.findById(memberId)
                 .orElseThrow(IllegalMemberAccessException::new);
 
-        Board board = Board.createBoard(boardType, boardWriteForm.getTitle(), boardWriteForm.getContent(), writer.getId());
+        Board board = Board.createBoard(boardType, boardWriteForm.getTitle(), boardWriteForm.getContent(), writer);
         this.boardMapper.save(board); // 게시글 등록
         return board.getId(); // 작성된 게시글 id
     }

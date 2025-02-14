@@ -2,6 +2,7 @@ package hello.qnaboard.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
@@ -13,7 +14,7 @@ import java.time.Duration;
 @RequiredArgsConstructor
 public class RedisUtil {
 
-    private final StringRedisTemplate stringRedisTemplate; // from RedisConfig
+    private final RedisTemplate<String, String> stringRedisTemplate; // from RedisConfig
 
     /**
      * key를 통해 value 조회

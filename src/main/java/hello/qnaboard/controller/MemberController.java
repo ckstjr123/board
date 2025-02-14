@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,6 +26,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class MemberController {
 
+    private final PasswordEncoder passwordEncoder;
     private final MemberService memberService;
 
     /**
@@ -80,7 +82,7 @@ public class MemberController {
             }
             
             boolean isAuthCodeMatch = this.memberService.verifyEmailAuthCode(email, memberJoinForm.getEmailAuthCode());
-            Member member = isAuthCodeMatch ? Member.createMember(nickname, email, password) : null;
+            Member member = isAuthCodeMatch ? Member.createMember(nickname, email, this.passwordEncoder.encode(password)) : null;
             if (member == null) {
                 // 이메일 인증번호 불일치
                 bindingResult.rejectValue("emailAuthCode", null, "인증 번호가 틀립니다.");

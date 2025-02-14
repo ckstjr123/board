@@ -22,6 +22,10 @@ repositories {
 }
 
 dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+//	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
@@ -35,7 +39,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-mail:2.7.17'
 	
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis' // Redis
-	implementation 'org.springframework.session:spring-session-data-redis' // 세션 레디스에 저장(스프링 RedisSession)
+	implementation 'org.springframework.session:spring-session-data-redis' // 스프링 레디스 세션
 
 	testImplementation 'org.projectlombok:lombok:1.18.28'
 	compileOnly 'org.projectlombok:lombok'

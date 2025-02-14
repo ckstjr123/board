@@ -16,7 +16,7 @@ import javax.validation.constraints.*;
 public class MemberJoinForm {
 
     @NotBlank(message = "닉네임은 필수입니다.")
-    @Size(max = 15, message = "닉네임은 최대 15자입니다.")
+    @Size(max = 18, message = "닉네임은 최대 18자입니다.")
     private String name; // 닉네임
 
     @EmailDomain

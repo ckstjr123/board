@@ -1,7 +1,6 @@
 package hello.qnaboard.service;
 
 import hello.qnaboard.constant.BoardType;
-import hello.qnaboard.constant.Role;
 import hello.qnaboard.controller.dto.MemberJoinForm;
 import hello.qnaboard.domain.Board;
 import hello.qnaboard.domain.Comment;
@@ -43,11 +42,11 @@ class BoardServiceTest {
     @DisplayName("게시물 상세 조회")
     void boardDetail() {
         //given
-        Long writerId = this.createWriter();
-        Long boardId = this.postBoard(writerId);
+        Member writer = this.createWriter();
+        Long boardId = this.postBoard(writer);
         List<Long> commentIds = new ArrayList<>();
-        commentIds.add(this.leaveComment(boardId, writerId));
-        commentIds.add(this.leaveComment(boardId, writerId));
+        commentIds.add(this.leaveComment(boardId, writer));
+        commentIds.add(this.leaveComment(boardId, writer));
 
         //when
         BoardWithCommentsVO boardWithCommentsVO = this.boardService.boardDetail(boardId);
@@ -55,7 +54,7 @@ class BoardServiceTest {
         //then
         BoardVO boardVO = boardWithCommentsVO.getBoardVO();
         assertThat(boardVO.getId()).isEqualTo(boardId);
-        assertThat(boardVO.getView()).isEqualTo(1L);
+        assertThat(boardVO.getView() + 1L).isEqualTo(1L); // 먼저 게시물이 있는지 조회해서 boardVO를 생성한 뒤 조회수를 올리기 때문
 
         List<CommentVO> commentVoList = boardWithCommentsVO.getCommentVoList();
         List<Long> commentVoIds = new ArrayList<>();
@@ -76,13 +75,13 @@ class BoardServiceTest {
     @DisplayName("게시물 권한 검증")
     void validateBoard() {
         //given
-        Long writerId = this.createWriter();
-        Long boardId = this.postBoard(writerId);
+        Member writer = this.createWriter();
+        Long boardId = this.postBoard(writer);
         Member member = Member.createMember("비작성자", "user@gmail.com", "password4321!");
         this.memberMapper.save(member);
 
         // 검증을 통과하면 boardVO 객체 반환
-        assertThat(this.boardService.validateBoard(boardId, writerId)).isInstanceOf(BoardVO.class);
+        assertThat(this.boardService.validateBoard(boardId, writer.getId())).isInstanceOf(BoardVO.class);
 
         Long memberId = member.getId();
         assertThatThrownBy(() -> this.boardService.validateBoard(boardId, memberId))
@@ -93,14 +92,14 @@ class BoardServiceTest {
     @DisplayName("게시글 수정")
     void edit() {
         //given
-        Long writerId = this.createWriter();
-        Long boardId = this.postBoard(writerId);
+        Member writer = this.createWriter();
+        Long boardId = this.postBoard(writer);
 
         //when
         BoardUpdateForm updateParam = new BoardUpdateForm();
         updateParam.setTitle("수정한 제목");
         updateParam.setContent("수정한 내용");
-        this.boardService.edit(boardId, updateParam, writerId);
+        this.boardService.edit(boardId, updateParam, writer.getId());
 
         //then
         BoardVO editBoardVO = this.boardMapper.findById(boardId).orElseThrow();
@@ -110,7 +109,7 @@ class BoardServiceTest {
     }
 
 
-    private Long createWriter() {
+    private Member createWriter() {
         MemberJoinForm memberJoinForm = new MemberJoinForm();
         memberJoinForm.setName("작성자");
         memberJoinForm.setEmail("test@gmail.com");
@@ -118,18 +117,18 @@ class BoardServiceTest {
 
         Member member = Member.createMember(memberJoinForm.getName(), memberJoinForm.getEmail(), memberJoinForm.getPassword());
         this.memberMapper.save(member);
-        return member.getId();
+        return member;
     }
 
-    private Long postBoard(Long writerId) {
+    private Long postBoard(Member writer) {
         BoardWriteForm boardWriteForm = new BoardWriteForm("게시글 제목", "게시글 내용"); // 작성할 게시물
-        Board board = Board.createBoard(BoardType.FREE, boardWriteForm.getTitle(), boardWriteForm.getContent(), writerId);
+        Board board = Board.createBoard(BoardType.FREE, boardWriteForm.getTitle(), boardWriteForm.getContent(), writer);
         this.boardMapper.save(board);
         return board.getId();
     }
 
-    private Long leaveComment(Long boardId, Long writerId) {
-        Comment comment = Comment.createComment(boardId, writerId, "답글 내용");
+    private Long leaveComment(Long boardId, Member writer) {
+        Comment comment = Comment.createComment(boardId, writer, "답글 내용");
         this.commentMapper.save(comment);
         return comment.getId();
     }

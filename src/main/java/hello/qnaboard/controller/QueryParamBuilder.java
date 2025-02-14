@@ -36,8 +36,7 @@ public class QueryParamBuilder {
 
     private String getQueryParamValue(Object value) {
         if (value != null) {
-            return value instanceof Optional ?
-                    (String) ((Optional) value).map(Object::toString).orElse(null) : value.toString();
+            return value.toString();
         } else {
             return null;
         }

@@ -5,8 +5,8 @@
 
     <!-- Comment 저장 -->
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO comment (board_id, member_id, comment_content, reg_time)
-        VALUES (#{boardId}, #{memberId}, #{content}, #{regTime})
+        INSERT INTO comment (board_id, member_id, writer_name, comment_content, reg_time)
+        VALUES (#{boardId}, #{memberId}, #{writerName}, #{content}, #{regTime})
     </insert>
 
 <!--
@@ -27,12 +27,11 @@
         SELECT
           c.comment_id,
           c.board_id,
-          m.member_id as writer_id,
-          m.name as writer_name,
+          c.member_id as writer_id,
+          c.writer_name,
           c.comment_content,
           c.reg_time
         FROM comment c
-        JOIN member m ON c.member_id = m.member_id
         WHERE comment_id = #{id}
     </select>
 
@@ -41,12 +40,11 @@
         SELECT
           c.comment_id,
           c.board_id,
-          m.member_id as writer_id,
-          m.name as writer_name,
+          c.member_id as writer_id,
+          c.writer_name,
           c.comment_content,
           c.reg_time
         FROM comment c
-        JOIN member m ON c.member_id = m.member_id
         WHERE c.board_id = #{boardId}
     </select>
 

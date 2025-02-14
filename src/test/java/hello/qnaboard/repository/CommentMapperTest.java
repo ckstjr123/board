@@ -35,10 +35,10 @@ class CommentMapperTest {
     void save() {
         //given
         Member writer = this.getWriter();
-        Long boardId = this.writeBoard(writer.getId());
+        Long boardId = this.writeBoard(writer);
 
         //when
-        Comment comment = Comment.createComment(boardId, writer.getId(), "답글 내용");
+        Comment comment = Comment.createComment(boardId, writer, "답글 내용");
         this.commentMapper.save(comment);
 
         //then
@@ -48,10 +48,9 @@ class CommentMapperTest {
 
         //반환된 CommentVO 검증
         assertThat(commentVO.getWriterId()).isEqualTo(writer.getId()); // 답글 작성자 id
-        assertThat(commentVO.getWriterName()).isEqualTo(writer.getName()); // 답글 작성자 명
         assertThat(commentVO)
                 .usingRecursiveComparison()
-                .ignoringFields("writerId", "writerName")
+                .ignoringFields("writerId")
                 .isEqualTo(comment);
     }
 
@@ -61,11 +60,11 @@ class CommentMapperTest {
     void findByBoardId() {
         //given
         Member writer = this.getWriter();
-        Long boardId = this.writeBoard(writer.getId());
+        Long boardId = this.writeBoard(writer);
         List<Comment> comments = new ArrayList<>();
-        Comment comment1 = Comment.createComment(boardId, writer.getId(), "답글1");
-        Comment comment2 = Comment.createComment(boardId, writer.getId(), "답글2");
-        Comment comment3 = Comment.createComment(boardId, writer.getId(), "답글3");
+        Comment comment1 = Comment.createComment(boardId, writer, "답글1");
+        Comment comment2 = Comment.createComment(boardId, writer, "답글2");
+        Comment comment3 = Comment.createComment(boardId, writer, "답글3");
         comments.add(comment1);
         comments.add(comment2);
         comments.add(comment3);
@@ -79,12 +78,11 @@ class CommentMapperTest {
         //then
         commentVos.forEach((commentVO) -> {
             assertThat(commentVO.getWriterId()).isEqualTo(writer.getId());
-            assertThat(commentVO.getWriterName()).isEqualTo(writer.getName());
         });
 
         // 조회한 commentVo 리스트의 size 및 동등성 비교까지 수행됨
         assertThat(commentVos).usingRecursiveComparison()
-                .ignoringFields("writerId", "writerName")
+                .ignoringFields("writerId")
                 .isEqualTo(comments);
     }
 
@@ -100,9 +98,9 @@ class CommentMapperTest {
         return member;
     }
 
-    private Long writeBoard(Long writerId) {
+    private Long writeBoard(Member writer) {
         BoardWriteForm boardWriteForm = new BoardWriteForm("게시글 제목", "게시글 내용");
-        Board board = Board.createBoard(BoardType.FREE, boardWriteForm.getTitle(), boardWriteForm.getContent(), writerId);
+        Board board = Board.createBoard(BoardType.FREE, boardWriteForm.getTitle(), boardWriteForm.getContent(), writer);
         this.boardMapper.save(board);
         return board.getId();
     }

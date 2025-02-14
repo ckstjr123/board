@@ -15,21 +15,22 @@ import java.util.List;
 @EnableAsync
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-    @Override
+/*  @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 로그인 체크 인터셉터
         registry.addInterceptor(new LoginCheckInterceptor())
                 .order(1)
                 .addPathPatterns("/{boardType}/write", "/{boardType}/{boardId}/edit");
     }
+*/
+
+//    @Override
+//    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+//        resolvers.add(new LoginMemberArgumentResolver());
+//    }
 
     @Override
     public void addFormatters(FormatterRegistry registry ) {
         registry.addFormatter(new BoardTypeFormatter());
-    }
-
-    @Override
-    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(new LoginMemberArgumentResolver());
     }
 }

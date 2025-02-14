@@ -1,13 +1,18 @@
 package hello.qnaboard.service;
 
 import hello.qnaboard.domain.Member;
+import hello.qnaboard.dto.SessionMember;
 import hello.qnaboard.exception.DuplicateMemberException;
 import hello.qnaboard.exception.EmailAuthException;
 import hello.qnaboard.repository.MemberMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Optional;
 import java.util.Random;
@@ -15,7 +20,7 @@ import java.util.Random;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class MemberService {
+public class MemberService implements UserDetailsService {
 
     private final MemberMapper memberMapper;
     private final EmailService emailService;
@@ -24,6 +29,7 @@ public class MemberService {
 
     /**
      * 회원가입 시 이메일 인증 요청
+     *
      * @param toEmail
      * @throws DuplicateMemberException
      * @throws org.springframework.mail.MailException 인증번호 전송 실패
@@ -44,18 +50,24 @@ public class MemberService {
      * @return {@code String} newEmailAuthcode
      */
     private String generateEmailAuthCode() {
-        Random random = new SecureRandom();
         StringBuilder sb = new StringBuilder();
+        try {
+            Random numberGenerator = SecureRandom.getInstance("SHA1PRNG");
 
-        int length = 6; // 인증번호는 6자리
-        for (int i = 0; i < length; i++) {
-            sb.append(random.nextInt(10)); // 0부터 10 미만
+            int length = 6; // 인증번호는 6자리
+            for (int i = 0; i < length; i++) {
+                sb.append(numberGenerator.nextInt(10)); // 0부터 10 미만 중
+            }
+        } catch (NoSuchAlgorithmException ex) {
+            // should not happen
         }
+
         return sb.toString();
     }
 
     /**
      * 닉네임 중복 체크
+     *
      * @param nickname
      * @return 중복 닉네임이면 true
      */
@@ -66,6 +78,7 @@ public class MemberService {
 
     /**
      * 이메일을 통해 이미 가입된 회원인지 확인
+     *
      * @param email
      * @throws DuplicateMemberException
      */
@@ -73,12 +86,13 @@ public class MemberService {
         Optional<Member> findMember = this.memberMapper.findByEmail(email);
 
         if (findMember.isPresent()) {
-            throw new DuplicateMemberException("이미 가입된 회원입니다.");
+            throw new DuplicateMemberException("이미 가입된 이메일입니다.");
         }
     }
 
     /**
      * 신규 회원가입 이메일에 대해 발급된 인증번호가 있으면 반환
+     *
      * @param email
      * @return {@code String} emailAuthCode
      * @throws DuplicateMemberException
@@ -100,6 +114,7 @@ public class MemberService {
 
     /**
      * 이메일 인증번호 일치 여부 검증
+     *
      * @param email
      * @param authCode
      * @return {@code boolean} isAuthCodeMatch
@@ -114,8 +129,7 @@ public class MemberService {
             // 인증번호 일치, 레디스에 저장된 해당 이메일 인증번호 데이터 삭제
             this.redisUtil.deleteData(EMAIL_AUTH_KEY_PREFIX + email);
             return true;
-        }
-        else {
+        } else {
             return false; // 인증번호 불일치
         }
     }
@@ -127,6 +141,7 @@ public class MemberService {
 
     /**
      * 회원가입 처리
+     *
      * @param member
      * @return {@code Long} savedMemberId
      */
@@ -136,4 +151,22 @@ public class MemberService {
         return member.getId();
     }
 
+
+
+    /**
+     * 이메일로 조회해서 반환한 유저 정보를 토대로 DaoAuthenticationProvider에서 로그인 검증이 수행됨
+     * @param email
+     * @return userDetails
+     * @throws UsernameNotFoundException
+     */
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        // 해당 이메일로 가입된 유저 조회, 존재하지 않으면 예외
+        Member member = this.memberMapper.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException(email));
+
+        SessionMember userDetails = new SessionMember(member.getId(), member.getName());
+        userDetails.setPassword(member.getPassword()); // 로그인 검증에 사용될 비밀번호 세팅. 인증을 완료하고 null로 초기화 됨
+        return userDetails;
+    }
 }

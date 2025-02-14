@@ -40,7 +40,7 @@ public class BoardMapperTest {
         //given
         Member writer = this.getWriter(); // 작성자
         BoardWriteForm boardWriteForm = new BoardWriteForm("게시글 제목", "게시글 내용"); // 작성할 게시물
-        Board board = Board.createBoard(BoardType.FREE, boardWriteForm.getTitle(), boardWriteForm.getContent(), writer.getId());
+        Board board = Board.createBoard(BoardType.FREE, boardWriteForm.getTitle(), boardWriteForm.getContent(), writer);
 
         //when
         this.boardMapper.save(board); // 게시글 등록
@@ -52,10 +52,9 @@ public class BoardMapperTest {
         log.info("findBoardResultVO: {}", boardVO);
 
         // 반환된 BoardVO 검증
-        assertThat(boardVO.getWriterId()).isEqualTo(writer.getId()); // 게시글 작성자 id
-        assertThat(boardVO.getWriterName()).isEqualTo(writer.getName()); // 게시글 작성자 명
+        assertThat(boardVO.getWriterId()).isEqualTo(writer.getId());
         assertThat(boardVO).usingRecursiveComparison()
-                .ignoringFields("writerId", "writerName")
+                .ignoringFields("writerId")
                 .isEqualTo(board);
     }
 
@@ -64,7 +63,7 @@ public class BoardMapperTest {
     void upView() {
         Member writer = this.getWriter();
         BoardWriteForm boardWriteForm = new BoardWriteForm("제목", "내용");
-        Board board = Board.createBoard(BoardType.FREE, boardWriteForm.getTitle(), boardWriteForm.getContent(), writer.getId());
+        Board board = Board.createBoard(BoardType.FREE, boardWriteForm.getTitle(), boardWriteForm.getContent(), writer);
         this.boardMapper.save(board);
 
         BoardVO savedBoardVO = this.boardMapper.findById(board.getId()).orElseThrow();
@@ -82,10 +81,10 @@ public class BoardMapperTest {
         Member writer = this.getWriter();
 
         BoardWriteForm boardWriteForm1 = new BoardWriteForm("글1", "내용1");
-        Board board1 = Board.createBoard(BoardType.FREE, boardWriteForm1.getTitle(), boardWriteForm1.getContent(), writer.getId());
+        Board board1 = Board.createBoard(BoardType.FREE, boardWriteForm1.getTitle(), boardWriteForm1.getContent(), writer);
         this.boardMapper.save(board1);
         BoardWriteForm boardWriteForm2 = new BoardWriteForm("글2", "내용2");
-        Board board2 = Board.createBoard(BoardType.FREE, boardWriteForm2.getTitle(), boardWriteForm2.getContent(), writer.getId());
+        Board board2 = Board.createBoard(BoardType.FREE, boardWriteForm2.getTitle(), boardWriteForm2.getContent(), writer);
         this.boardMapper.save(board2);
 
         // 검색 조건 없음
@@ -114,7 +113,7 @@ public class BoardMapperTest {
         BoardWriteForm boardWriteForm = new BoardWriteForm("제목", "내용");
         List<Board> boards = new ArrayList<>();
         for (int i = 0; i < 2; i++) {
-            Board board = Board.createBoard(BoardType.FREE, boardWriteForm.getTitle(), boardWriteForm.getContent(), writer.getId());
+            Board board = Board.createBoard(BoardType.FREE, boardWriteForm.getTitle(), boardWriteForm.getContent(), writer);
             this.boardMapper.save(board);
             boards.add(board);
         }
@@ -126,12 +125,11 @@ public class BoardMapperTest {
 
         boardList.forEach((boardListItem) -> {
             assertThat(boardListItem.getWriterId()).isEqualTo(writer.getId());
-            assertThat(boardListItem.getWriterName()).isEqualTo(writer.getName());
         });
 
         Collections.reverse(boards); // 게시글 목록은 최신순 정렬이기 때문에 역순으로 정렬
         assertThat(boardList).usingRecursiveComparison()
-                .ignoringFields("writerId", "writerName")
+                .ignoringFields("writerId")
                 .isEqualTo(boards);
     }
 
@@ -141,7 +139,7 @@ public class BoardMapperTest {
         //given
         Member writer = this.getWriter();
         BoardWriteForm boardWriteForm = new BoardWriteForm("게시글 제목", "게시글 내용");
-        Board board = Board.createBoard(BoardType.FREE, boardWriteForm.getTitle(), boardWriteForm.getContent(), writer.getId());
+        Board board = Board.createBoard(BoardType.FREE, boardWriteForm.getTitle(), boardWriteForm.getContent(), writer);
         this.boardMapper.save(board);
         Long boardId = board.getId();
 

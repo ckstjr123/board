@@ -1,7 +1,7 @@
 package hello.qnaboard.argumentresolver;
 
 import hello.qnaboard.constant.SessionConst;
-import hello.qnaboard.controller.SessionMember;
+import hello.qnaboard.dto.SessionMember;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -41,6 +41,7 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
         if (session == null) {
             return null;
         }
-        return session.getAttribute(SessionConst.LOGIN_MEMBER);
+
+        return session.getAttribute(SessionConst.LOGIN_MEMBER); //SessionMember
     }
 }

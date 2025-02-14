@@ -1,52 +1,68 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
+
+
 <header class="p-3 text-bg-light" style="border-bottom: 1px solid #d5d5d5;" th:fragment="header"> <!-- 헤더 -->
-    <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <a href="https://getbootstrap.kr/"
-               class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-                <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
-                    <use xlink:href="#bootstrap"/>
-                </svg>
-            </a>
+    <style>
+        @media (min-width: 992px) {
+            header > div {
+                padding-left: 12.5rem;
+                padding-right: 12.5rem;
+            }
+        }
 
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                <li><a href="/" class="nav-link px-2 text-primary">Home</a></li>
-                <li><a href="#" class="nav-link px-2 text-secondary">Q&A</a></li>
-                <li><a href="#" class="nav-link px-2 text-secondary">지식</a></li>
-                <li><a href="#" class="nav-link px-2 text-secondary">자유</a></li>
-                <li><a href="#" class="nav-link px-2 text-secondary">About</a></li>
-            </ul>
+        @media (min-width: 992px) {
+            .bd-search {
+                margin-right: 9.5rem;
+            }
+        }
+    </style>
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <a href="https://getbootstrap.kr/"
+           class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+            <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
+                <use xlink:href="#bootstrap"/>
+            </svg>
+        </a>
 
-            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-4" role="search">
-                <input type="search" id="bd_search" class="form-control form-control-dark rounded-4 fw-light text-bg-light"
-                       placeholder="게시판 통합검색" aria-label="Search">
-            </form>
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+            <li><a href="/" class="nav-link px-2 text-primary">Home</a></li>
+            <li><a href="#" class="nav-link px-2 text-secondary">Q&A</a></li>
+            <li><a href="#" class="nav-link px-2 text-secondary">지식</a></li>
+            <li><a href="#" class="nav-link px-2 text-secondary">자유</a></li>
+        </ul>
 
-            <div th:if="${loginMember} != null" style="margin-left: 6rem;">
-                <div class="dropdown">
-                    <i class="fa-solid fa-user btn btn-secondary btn-lg dropdown-toggle"
-                       type="button" data-bs-toggle="dropdown" aria-expanded="false">&nbsp;</i>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a class="dropdown-item" href="#" th:text="${loginMember.name}">프로필</a>
-                        </li>
-                        <li>
-                            <form th:action="@{/logout}" method="post">
-                                <button class="dropdown-item" type="submit">로그아웃</button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
+        <form class="bd-search col-12 col-lg-auto mb-3 mb-lg-0" role="search" style="max-width: 80vw;">
+            <input type="search" id="bd_search"
+                   class="form-control form-control-dark rounded-4 fw-light text-bg-light"
+                   placeholder="게시판 통합검색" aria-label="Search">
+        </form>
+
+        <div th:if="${loginMember} != null" class="profile">
+            <div class="dropdown">
+                <i class="fa-solid fa-user btn btn-secondary btn-lg dropdown-toggle"
+                   type="button" data-bs-toggle="dropdown" aria-expanded="false">&nbsp;</i>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a class="dropdown-item" href="#" th:text="${loginMember.name}">프로필</a>
+                    </li>
+                    <li>
+                        <form th:action="@{/logout}" method="post">
+                            <button class="dropdown-item" type="submit">로그아웃</button>
+                        </form>
+                    </li>
+                </ul>
             </div>
-            <div th:unless="${loginMember} != null">
-                <div class="text-end">
-                    <button type="button" class="btn btn-light rounded-4 me-2" style="border-color: hsla(220,9%,46%,.3);"
-                            th:onclick="|location.href='@{/login}'|">로그인</button>
-                    <button type="button" class="btn rounded-4 text-white" style="background: #3e4042;"
-                            th:onclick="|location.href='@{/members/new}'|">회원가입</button>
-                </div>
+        </div>
+        <div th:unless="${loginMember} != null" class="login">
+            <div class="text-end">
+                <button type="button" class="btn btn-light rounded-4 me-2"
+                        style="color: #111827; border-color: hsla(220,9%,46%,.3);"
+                        th:onclick="|location.href='@{/login}'|"><span>로그인</span></button>
+                <button type="button" class="btn rounded-4 text-white"
+                        style="color: #FFFFFF; background-color: #808090;"
+                        th:onclick="|location.href='@{/members/new}'|"><span>회원가입</span></button>
             </div>
         </div>
     </div>

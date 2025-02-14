@@ -9,7 +9,6 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 
 /**
  * Redis와의 연결 정보를 설정,
@@ -17,7 +16,7 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
  */
 @Configuration
 @RequiredArgsConstructor
-@EnableRedisRepositories // Redis를 사용한다고 명시해주는 애노테이션
+//@EnableRedisHttpSession 설정으로 대체
 public class RedisConfig {
 
     private final RedisProperties redisProperties; // Redis 서버와의 연결 정보를 저장하는 객체(yml에 설정한 host, post 정보 등)
@@ -25,25 +24,19 @@ public class RedisConfig {
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         // Redis Java 클라이언트 라이브러리인 Lettuce를 사용해서 Redis 서버와 연결해줌
-        RedisStandaloneConfiguration redisStandaloneConfig = new RedisStandaloneConfiguration(this.redisProperties.getHost(), this.redisProperties.getPort());
-        redisStandaloneConfig.setPassword(this.redisProperties.getPassword());
+        RedisStandaloneConfiguration redisStandaloneConfig = new RedisStandaloneConfiguration(redisProperties.getHost(), redisProperties.getPort());
+        redisStandaloneConfig.setPassword(redisProperties.getPassword());
         return new LettuceConnectionFactory(redisStandaloneConfig);
     }
 
     /**
-     * RedisTemplate은 Redis 데이터를 저장하고 조회하는 기능을 하는 클래스
+     * RedisTemplate은 Redis에 데이터를 저장하고 조회하는 기능을 하는 클래스
      * @return RedisTemplate
      */
     @Bean
     public RedisTemplate redisTemplate() {
         StringRedisTemplate stringRedisTemplate = new StringRedisTemplate();
-
-        // 직렬화 설정
-//        stringRedisTemplate.setKeySerializer(new StringRedisSerializer());
-//        stringRedisTemplate.setValueSerializer(new StringRedisSerializer());
-
         stringRedisTemplate.setConnectionFactory(this.redisConnectionFactory());
         return stringRedisTemplate;
     }
-
 }

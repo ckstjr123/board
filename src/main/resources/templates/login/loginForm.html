@@ -50,10 +50,11 @@
     <div class="py-5 text-center">
         <h2>로그인</h2>
     </div>
+
+    <!-- 폼 로그인 -->
     <form action="item.html" th:action th:object="${loginForm}" method="post">
         <div th:if="${#fields.hasGlobalErrors()}">
-            <p class="field-error" th:each="err : ${#fields.globalErrors()}"
-               th:text="${err}">전체 오류 메시지</p>
+            <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">전체 오류 메시지</p>
         </div>
         <div>
             <label for="email">이메일</label>
@@ -79,6 +80,20 @@
             </div>
         </div>
     </form>
+
+    <hr class="mt-5 mb-4">
+
+    <!-- 소셜 로그인 -->
+    <div class="oauth2-login d-flex justify-content-center gap-2">
+        <a href="/oauth2/authorization/google"><img src="/image/social/google.png" alt="구글 로그인"></a>
+        <a href="/oauth2/authorization/naver"><img src="/image/social/naver.png" alt="네이버 로그인"></a>
+        <a href="/oauth2/authorization/kakao"><img src="/image/social/kakao.png" alt="카카오 로그인"></a>
+    </div>
+
+
+
+
+
 </div> <!-- /container -->
 </body>
 </html>

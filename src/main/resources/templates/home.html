@@ -41,6 +41,8 @@
         .board-type {
             text-align: center;
             border-bottom: none;
+            border-radius: 10px !important;
+            height: 3.5rem;
         }
         .board-type:hover {
             cursor: pointer;
@@ -51,6 +53,7 @@
         .board-type > h5 {
             color: #666A73 !important;
             font-family: "Nanum Gothic", sans-serif;
+            line-height: 2.5rem;
         }
 
         .bd-title {
@@ -76,7 +79,7 @@
     <div class="row justify-content-center">
         <div class="col-lg-6" style="width: 30rem;">
             <div class="card border-0">
-                <div onclick="location.href='/hot'" class="card-header board-type hot" style="border-radius: 10px;">
+                <div onclick="location.href='/hot'" class="card-header board-type">
                     <h5 class="card-title fw-bold">BEST</h5>
                 </div>
                 <div class="card-body">
@@ -135,7 +138,7 @@
         </div>
         <div class="col-lg-6" style="width: 30rem;">
             <div class="card border-0">
-                <div onclick="location.href='/free'" class="card-header board-type" style="border-radius: 10px;">
+                <div onclick="location.href='/free'" class="card-header board-type">
                     <h5 class="card-title fw-bold">자유</h5>
                 </div>
                 <div class="card-body">
@@ -182,7 +185,7 @@
     <div class="row justify-content-center" style="margin-top: 30px;">
         <div class="col-lg-6" style="width: 30rem;">
             <div class="card border-0">
-                <div onclick="location.href='/questions'" class="card-header board-type" style="border-radius: 10px;">
+                <div onclick="location.href='/questions'" class="card-header board-type">
                     <h5 class="card-title fw-bold">질문 & 답변</h5>
                 </div>
                 <div class="card-body">
@@ -227,7 +230,7 @@
         </div>
         <div class="col-lg-6" style="width: 30rem;">
             <div class="card border-0">
-                <div onclick="location.href='/share'" class="card-header board-type" style="border-radius: 10px;">
+                <div onclick="location.href='/share'" class="card-header board-type">
                     <h5 class="card-title fw-bold">공유</h5>
                 </div>
                 <div class="card-body">

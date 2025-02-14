@@ -21,27 +21,36 @@ import javax.validation.Valid;
 /**
  * 로그인 및 로그아웃 요청 처리
  */
-@Slf4j
 @Controller
+@Slf4j
 @RequiredArgsConstructor
 public class LoginController {
 
-    private final LoginService loginService;
+//    private final LoginService loginService;
 
     /**
      * 로그인 폼
      */
     @GetMapping("/login")
-    public String loginForm(LoginForm form, Model model) {
-        model.addAttribute("loginForm", form);
+    public String loginForm(@ModelAttribute LoginForm form) {
         return "login/loginForm";
     }
+
+    /**
+     * 폼 로그인 실패 시 ForwardAuthenticationFailureHandler의 포워딩에 의해 실행되는 컨트롤러
+     */
+    @PostMapping("/login/fail")
+    public String loginFail(@ModelAttribute @Valid LoginForm form, BindingResult bindingResult) {
+        bindingResult.reject("loginFail", "아이디 또는 비밀번호를 확인해 주세요.");
+        return "login/loginForm";
+    }
+
 
     /**
      * 로그인
      * - 로그인 직전에 요청했던 페이지 있으면 해당 페이지로 리다이렉트, 그외 홈으로 리다이렉트
      */
-    @PostMapping("/login")
+/*    @PostMapping("/login")
     public String login(@ModelAttribute @Valid LoginForm loginForm, BindingResult bindingResult,
                         @RequestParam(defaultValue = "/") String redirectURL, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
@@ -57,19 +66,20 @@ public class LoginController {
             return "login/loginForm";
         }
 
-        /* 로그인 성공 */
+        *//* 로그인 성공 *//*
         HttpSession session = request.getSession(); // 기존 세션이 존재하면 반환, 없으면 신규 세션 생성
         // 세션에 로그인 회원 정보 저장(replace or add this attribute)
         session.setAttribute(SessionConst.LOGIN_MEMBER, new SessionMember(loginMember.getId(), loginMember.getName()));
 
         log.info("로그인: {}, 세션 ID: {}", loginMember.getName(), session.getId());
         return "redirect:" + redirectURL;
-    }
+    }*/
+
 
     /**
      * 로그아웃
      */
-    @PostMapping("/logout")
+/*    @PostMapping("/logout")
     public String logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) {
@@ -77,6 +87,6 @@ public class LoginController {
         }
 
         return "redirect:/";
-    }
+    }*/
 
 }

@@ -16,7 +16,8 @@ public class Comment {
 
     private Long boardId; // 해당 답글이 달린 게시물
 
-    private Long memberId; // 해당 답글을 단 멤버
+    private Long memberId; // 해당 답글을 단 멤버 id
+    private String writerName; // 답글 작성자 명
 
     private String content; // 답글 내용
 
@@ -26,14 +27,15 @@ public class Comment {
     /**
      * Comment 생성 메서드
      * @param boardId
-     * @param memberId
+     * @param writer
      * @param content
      * @return Comment
      */
-    public static Comment createComment(Long boardId, Long memberId, String content) {
+    public static Comment createComment(Long boardId, Member writer, String content) {
         Comment comment = new Comment();
         comment.boardId = boardId;
-        comment.memberId = memberId;
+        comment.memberId = writer.getId();
+        comment.writerName = writer.getName();
         comment.content = content;
         comment.regTime = LocalDateTime.now(); // timestamp(6): yyyy-MM-dd HH:mm:ss:SSSSSS
         return comment;

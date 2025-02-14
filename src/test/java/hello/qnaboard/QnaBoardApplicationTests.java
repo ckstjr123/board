@@ -7,7 +7,6 @@ class QnaBoardApplicationTests {
 
 	@Test
 	void contextLoads() {
-
 	}
 
 }

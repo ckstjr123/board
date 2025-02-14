@@ -128,7 +128,7 @@
 <body class="d-flex flex-column">
 <th:block th:replace="/fragments/header.html :: header"></th:block>
 
-<div class="text-center h-50 mt-5 m-auto" style="width: 850px;" th:object="${boardListPage}" th:with="bdType=${boardType.toLowerCase()}">
+<div class="text-center h-50 mt-5 m-auto" style="width: 850px; max-width: 95vw;" th:object="${boardListPage}" th:with="bdType=${boardType.toLowerCase()}">
     <!-- 스프링 포맷터 적용해서 게시판 명 렌더링 -->
     <h2 class="board-type fw-bold">
         <a th:href="'/' + ${bdType}" class="text-dark" th:text="${{boardType}} + ' 게시판'">게시판 명</a>

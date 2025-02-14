@@ -17,6 +17,7 @@ public class Board {
     private Long id;
 
     private Long memberId; // 해당 게시글을 작성한 멤버 id
+    private String writerName; // 작성자 명
 
     private String title; // 제목
 
@@ -37,15 +38,16 @@ public class Board {
      * @param boardType
      * @param title
      * @param content
-     * @param memberId
+     * @param writer
      * @return Board
      */
-    public static Board createBoard(BoardType boardType, String title, String content, Long memberId) {
+    public static Board createBoard(BoardType boardType, String title, String content, Member writer) {
         Board board = new Board();
         board.boardType = boardType;
         board.title = title;
         board.content = content;
-        board.memberId = memberId; // 작성자
+        board.memberId = writer.getId(); // 작성자
+        board.writerName = writer.getName();
 
         // 년-월-일 시:분:초:fractional seconds(timestamp(6)으로 지정했으므로 MySQL DB에는 yyyy-MM-dd HH:mm:ss:SSSSSS 형식으로 저장됨)
         board.regTime = LocalDateTime.now(); // 게시물 등록 시각

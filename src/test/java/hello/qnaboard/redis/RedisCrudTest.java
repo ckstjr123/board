@@ -94,12 +94,13 @@ class RedisCrudTest {
     @DisplayName("Redis에 유효기간이 지정된 데이터는 만료 시 삭제됨")
     void expire() throws InterruptedException {
         // given
-        this.redisUtil.setDataExpire(KEY, VALUE, 30); // 데이터 유효시간 30초
+        this.redisUtil.setDataExpire(KEY, VALUE, 5); // 데이터 유효시간 5초
 
         // when
         String findValue = this.redisUtil.getValue(KEY);
+        assertThat(findValue).isEqualTo(VALUE);
         log.info("findValue: {}", findValue);
-        Thread.sleep(30000);
+        Thread.sleep(10000);
 
         // then
         String expiredValue = this.redisUtil.getValue(KEY);
