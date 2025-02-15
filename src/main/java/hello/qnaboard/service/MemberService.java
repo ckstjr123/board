@@ -99,7 +99,6 @@ public class MemberService implements UserDetailsService {
 
     /**
      * 이메일 인증번호 일치 여부 검증
-     *
      * @param email
      * @param authCode
      * @return {@code boolean} isAuthCodeMatch
@@ -109,7 +108,7 @@ public class MemberService implements UserDetailsService {
     public boolean verifyEmailAuthCode(String email, String authCode) {
         String emailAuthCode = this.findAuthCodeAbout(email); // 이메일 인증번호
 
-        boolean isAuthCodeMatch = authCode.equals(emailAuthCode); // 인증번호가 일치하는지 확인
+        boolean isAuthCodeMatch = authCode.equals(emailAuthCode);
         if (isAuthCodeMatch) {
             // 인증번호 일치, 레디스에 저장된 해당 이메일 인증번호 데이터 삭제
             this.redisUtil.deleteData(EMAIL_AUTH_KEY_PREFIX + email);
