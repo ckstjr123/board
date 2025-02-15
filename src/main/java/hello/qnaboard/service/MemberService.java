@@ -84,7 +84,7 @@ public class MemberService implements UserDetailsService {
      * @throws EmailAuthException
      */
     private String findAuthCodeAbout(String email) {
-        this.validateDuplicateMember(email); //기존 회원에겐 인증번호가 발급되지 않으므로 예외
+        this.validateDuplicateMember(email); // 기존 회원에겐 인증번호가 발급되지 않으므로 예외
 
         String authCodeKey = EMAIL_AUTH_KEY_PREFIX + email;
 
