@@ -78,7 +78,6 @@ public class MemberService implements UserDetailsService {
 
     /**
      * 신규 회원가입 이메일에 대해 발급된 인증번호가 있으면 반환
-     *
      * @param email
      * @return {@code String} emailAuthCode
      * @throws DuplicateMemberException
@@ -87,9 +86,9 @@ public class MemberService implements UserDetailsService {
     private String findAuthCodeAbout(String email) {
         this.validateDuplicateMember(email); //기존 회원에겐 인증번호가 발급되지 않으므로 예외
 
-        String authCode_key = EMAIL_AUTH_KEY_PREFIX + email;
+        String authCodeKey = EMAIL_AUTH_KEY_PREFIX + email;
 
-        String emailAuthCode = this.redisUtil.getValue(authCode_key); // 인증 요청 이메일에 대한 인증번호 조회
+        String emailAuthCode = this.redisUtil.getValue(authCodeKey); // 인증 요청 이메일에 대한 인증번호 조회
         if (emailAuthCode == null) {
             // 요청 이메일에 대한 인증번호가 유효하지 않음
             throw new EmailAuthException("미인증 또는 인증번호 만료, 이메일 인증을 요청해주세요.");
@@ -116,7 +115,7 @@ public class MemberService implements UserDetailsService {
             this.redisUtil.deleteData(EMAIL_AUTH_KEY_PREFIX + email);
             return true;
         } else {
-            return false; // 인증번호 불일치
+            return false;
         }
     }
 
@@ -127,7 +126,6 @@ public class MemberService implements UserDetailsService {
 
     /**
      * 회원가입 처리
-     *
      * @param member
      * @return {@code Long} savedMemberId
      */

@@ -39,7 +39,7 @@ public class MemberController {
     }
 
     /**
-     * ajax 이메일 인증번호 요청(회원가입 절차)
+     * 이메일 인증번호 ajax 요청(회원가입 절차)
      * @param toEmail
      */
     @PutMapping(value = "/authno-email", consumes = MediaType.APPLICATION_JSON_VALUE)

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class EmailService {
 
-    private final JavaMailSender emailSender; // 스프링 부트 자동 빈 등록
+    private final JavaMailSender mailSender; // 스프링 부트 자동 빈 등록
 
 
     /**
@@ -26,7 +26,7 @@ public class EmailService {
     public void sendEmail(String toEmail, String title, String text) {
         SimpleMailMessage emailForm = this.generateEmailForm(toEmail, title, text);
         try {
-            this.emailSender.send(emailForm);
+            this.mailSender.send(emailForm);
         } catch (MailException ex) {
             log.error("이메일 전송 실패", ex);
             throw ex;

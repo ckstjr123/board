@@ -55,7 +55,7 @@ class BoardServiceTest {
         //then
         BoardVO boardVO = boardWithCommentsVO.getBoardVO();
         assertThat(boardVO.getId()).isEqualTo(boardId);
-        assertThat(boardVO.getView() + 1L).isEqualTo(1L); // 먼저 게시물이 있는지 조회해서 boardVO를 생성한 뒤 조회수를 올리기 때문
+        assertThat(boardVO.getView()).isEqualTo(1L);
 
         List<CommentVO> commentVoList = boardWithCommentsVO.getCommentVoList();
         List<Long> commentVoIds = new ArrayList<>();
