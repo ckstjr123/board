@@ -8,7 +8,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmailService {
@@ -25,12 +24,7 @@ public class EmailService {
     @Async
     public void sendEmail(String toEmail, String title, String text) {
         SimpleMailMessage emailForm = this.generateEmailForm(toEmail, title, text);
-        try {
-            this.mailSender.send(emailForm);
-        } catch (MailException ex) {
-            log.error("이메일 전송 실패", ex);
-            throw ex;
-        }
+        this.mailSender.send(emailForm);
     }
 
     /**

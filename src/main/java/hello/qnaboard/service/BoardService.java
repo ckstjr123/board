@@ -77,7 +77,7 @@ public class BoardService {
      */
     @Transactional(readOnly = false)
     public BoardWithCommentsVO boardDetail(Long boardId) {
-        this.boardMapper.upView(boardId); // 조회수 up
+        this.boardMapper.upView(boardId); // 조회수 증가
         BoardVO boardVO = this.boardMapper.findById(boardId).orElseThrow(() -> new EmptyResultDataAccessException("게시물이 존재하지 않거나 삭제되었습니다.", 1));
         List<CommentVO> commentVOList = this.commentMapper.findByBoardId(boardId);
 

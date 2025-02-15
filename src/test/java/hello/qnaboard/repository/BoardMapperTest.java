@@ -6,9 +6,9 @@ import hello.qnaboard.domain.Board;
 import hello.qnaboard.domain.Member;
 import hello.qnaboard.repository.dto.BoardSearchCond;
 import hello.qnaboard.repository.dto.BoardUpdateForm;
+import hello.qnaboard.service.BoardWriteForm;
 import hello.qnaboard.vo.BoardListItem;
 import hello.qnaboard.vo.BoardVO;
-import hello.qnaboard.service.BoardWriteForm;
 import hello.qnaboard.vo.pagination.PageRequest;
 import hello.qnaboard.vo.pagination.Pageable;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
