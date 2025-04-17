@@ -55,7 +55,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 //          case KAKAO:
 //              return new KakaoResponse(oAuth2User);
             default:
-                // OAuth2AuthorizationRequestRedirectFilter에서 처리할 수 없는 Registration Id에 대해 동일한 예외가 이미 발생하지만 명시해 둠
+                // OAuth2AuthorizationRequestRedirectFilter에서 처리할 수 없는 Registration Id에 대해 동일한 예외가 이미 발생
                 throw new IllegalArgumentException("Invalid Client Registration with Id: " + registrationId);
         }
     }

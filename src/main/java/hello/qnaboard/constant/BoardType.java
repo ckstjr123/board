@@ -1,8 +1,7 @@
 package hello.qnaboard.constant;
 
 /**
- * 게시판 유형 [자유, 질문 & 답변, 지식 공유].
- * · HOT(인기 게시물): 각 게시판의 게시물 조회수와 추천 수를 기준으로 선정
+ * 게시판 유형 [자유, 질문 & 답변, 지식 공유]
  */
 public enum BoardType {
 
